@@ -1,0 +1,30 @@
+body { 
+	padding-top: 70px; 
+}
+
+/* Navigation appearance CSS */
+
+.open>.dropdown-menu {
+	background-color: #222222;
+}
+
+.dropdown-menu>li>a {
+	color: #9d9d9d;
+}
+
+.dropdown-menu>li>a:hover {
+	background-color: #222222;
+	color: white;
+}
+
+.dropdown-menu>.active>a,  .dropdown-menu>.active>a:hover {
+	background-color: black;
+}
+
+/* End of Navigation CSS */
+
+/* CSS for Backlog */
+td,th {
+	text-align: center;
+}
+
