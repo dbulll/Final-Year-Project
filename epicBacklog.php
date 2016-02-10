@@ -52,7 +52,6 @@
 </nav>
   
 <div class="container">
-  
   <h3>Epic's Backlog</h3>
   <div class="table-responsive">        
     <table class="table">
@@ -75,11 +74,14 @@
           $sql = mysqli_query($conn, 'SELECT * FROM tablethree');
           while($row = mysqli_fetch_array($sql))          
           {
-            ?>
+            $sql2 = mysqli_query($conn, "SELECT COUNT(*) FROM `tablefour` WHERE `epic_id` = ".$row['id']);
+            $result = mysqli_fetch_array($sql2); ?>
               <tr>
-                <td><?php echo $row['epicName']?></td>
-                <td><?php echo $row['epicDescription']?></td>
-                <td>1</td>
+                <td><?php echo $row['epicName']; ?></td>
+                <td><?php echo $row['epicDescription']; ?></td>
+                <td>
+                  <?php echo $result[0]; ?>
+                </td>
                 <td>
                   <a class="btn btn-info" id="expandButton" href="storyBacklog.php?id=<?php echo $row['id']?>">
                     Expand <span class="glyphicon glyphicon-arrow-right"></span>

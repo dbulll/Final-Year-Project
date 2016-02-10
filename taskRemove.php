@@ -52,6 +52,26 @@
 </nav>
   
 <div class="container">
+  <?php
+    $conn = new mysqli('localhost', 'root', '', 'tempdb');
+    if($conn->connect_errno > 0)
+    {
+      die('Unable to connect to database [' . $conn->connect_error . ']');
+    }
+    $sql = 'DELETE FROM tablefive WHERE id = ' . $_GET["id"] .'';
+      if ($conn->query($sql) === TRUE) 
+      {
+       echo "<div class='alert alert-success'>
+       <strong>Success!</strong> Task Successfully Removed.
+       </div>";
+      } 
+      else 
+      {
+        echo "<div class='alert alert-failure'>
+        <strong>Error!</strong> " . $sql . "<br>" . $conn->error . "</div>";
+      }
+      $conn->close();
+    ?>
   <h3>Task Backlog</h3>
   <div class="table-responsive">        
     <table class="table">
@@ -73,14 +93,7 @@
           {
             die('Unable to connect to database [' . $conn->connect_error . ']');
           }
-          if(isset($_GET['id']))
-          {
-            $sql = mysqli_query($conn, 'SELECT * FROM tablefive WHERE story_id = '.$_GET['id']);
-          }
-          else
-          {
-            $sql = mysqli_query($conn, 'SELECT * FROM tablefive');
-          }
+          $sql = mysqli_query($conn, 'SELECT * FROM tablefive');
           while($row = mysqli_fetch_array($sql))          
           {
             ?>

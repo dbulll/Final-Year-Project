@@ -30,8 +30,8 @@
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Backlog<span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="epicBacklog.php">Epic Backlog</a></li>
-            <li><a href="storyBacklog.php">User Story Backlog</a></li>
-            <li class="active"><a href="taskbacklog.php">Task Backlog</a></li>
+            <li class="active"><a href="storyBacklog.php">User Story Backlog</a></li>
+            <li><a href="taskbacklog.php">Task Backlog</a></li>
           </ul>
         </li>
         <li class="dropdown">
@@ -52,17 +52,39 @@
 </nav>
   
 <div class="container">
-  <h3>Task Backlog</h3>
+  <?php
+    $conn = new mysqli('localhost', 'root', '', 'tempdb');
+    if($conn->connect_errno > 0)
+    {
+      die('Unable to connect to database [' . $conn->connect_error . ']');
+    }
+    $sql = 'DELETE FROM tablefour WHERE id = ' . $_GET["id"] .'';
+      if ($conn->query($sql) === TRUE) 
+      {
+       echo "<div class='alert alert-success'>
+       <strong>Success!</strong> Story Successfully Removed.
+       </div>";
+      } 
+      else 
+      {
+        echo "<div class='alert alert-failure'>
+        <strong>Error!</strong> " . $sql . "<br>" . $conn->error . "</div>";
+      }
+      $conn->close();
+    ?>
+  <h3>User Story Backlog</h3>
   <div class="table-responsive">        
     <table class="table">
       <thead>
         <tr>
           <th>Id</th>
-          <th>Task Name</th>
-          <th>Task Description</th>
+          <th>Story Name</th>
+          <th>Description</th>
           <th>Priority</th>
           <th>Estimation (Hrs)</th>
-          <th>User Story Owner</th>
+          <th>Epic Owner</th>
+          <th>Tasks (No.)</th>
+          <th></th>
           <th></th>
         </tr>
       </thead>
@@ -73,26 +95,24 @@
           {
             die('Unable to connect to database [' . $conn->connect_error . ']');
           }
-          if(isset($_GET['id']))
-          {
-            $sql = mysqli_query($conn, 'SELECT * FROM tablefive WHERE story_id = '.$_GET['id']);
-          }
-          else
-          {
-            $sql = mysqli_query($conn, 'SELECT * FROM tablefive');
-          }
+          $sql = mysqli_query($conn, 'SELECT * FROM tablefour');
           while($row = mysqli_fetch_array($sql))          
           {
             ?>
               <tr>
                 <td><?php echo $row['id']?></td>
-                <td><?php echo $row['taskName']?></td>
-                <td><?php echo $row['taskDescription']?></td>
-                <td><?php echo $row['taskPriority']?></td>
-                <td><?php echo $row['taskEstimation']?></td>
-                <td><?php echo $row['story_id']?></td>
+                <td><?php echo $row['storyName']?></td>
+                <td><?php echo $row['storyDescription']?></td>
+                <td><?php echo $row['storyPriority']?></td>
+                <td><?php echo $row['storyEstimation']?></td>
+                <td><?php echo $row['epic_id']?></td>
                 <td>
-                  <a class="btn btn-danger" id="removeButton" href="taskRemove.php?id=<?php echo $row['id']?>">
+                  <a class="btn btn-info" id="expandButton" href="taskBacklog.php?id=<?php echo $row['id']?>">
+                    Expand <span class="glyphicon glyphicon-arrow-right"></span>
+                  </a>
+                </td>
+                <td>
+                  <a class="btn btn-danger" id="removeButton" href="storyRemove.php?id=<?php echo $row['id']?>">
                     Remove <span class="glyphicon glyphicon-remove"></span>
                   </a>
                 </td>
@@ -106,55 +126,55 @@
 </div>
 
 <div class="container">
-  <h3> Create New Task </h3>
-  <form class="form-horizontal col-lg-8 col-lg-offset-2" id="taskCreationForm" data-toggle="validator" role="form" novalidate="true" action="taskCreate.php" method="post">
+  <h3> Create New Story </h3>
+  <form class="form-horizontal col-lg-8 col-lg-offset-2" id="storyCreationForm" data-toggle="validator" role="form" novalidate="true" action="storyCreate.php" method="post">
     <div class="row form-group has-feedback">
-      <label class="control-label" for="task_name">Task Name:</label>
-      <input type="text" class="form-control" name="task_name" pattern="^[A-z0-9\s]{1,}$" maxlength="30" placeholder="Enter Task Name" required>
+      <label class="control-label" for="story_name">Story Name:</label>
+      <input type="text" class="form-control" name="story_name" pattern="^[A-z0-9\s]{1,}$" maxlength="30" placeholder="Enter Story Name" required>
       <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
     </div>
     <div class="row form-group has-feedback">
-      <label class="control-label" for="task_description">Task Description:</label>
-      <textarea type="text" class="form-control" name="task_description" maxlength="100" placeholder="Enter Task Description" rows="3" required></textarea>
+      <label class="control-label" for="story_description">Story Description:</label>
+      <textarea type="text" class="form-control" name="story_description" maxlength="100" placeholder="Enter Story Description" rows="3" required></textarea>
       <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
     </div>
     <div class="row">
-      <div class="col-lg-6">
-        <label class="control-label" for="task_story">Story</label>
-        <select class="form-control" name="task_story">
+      <div class="col-lg-5">
+        <label class="control-label" for="story_epic">Epic</label>
+        <select class="form-control" name="story_epic">
           <?php
           $conn = new mysqli('localhost', 'root', '', 'tempdb');
           if($conn->connect_errno > 0)
           {
             die('Unable to connect to database [' . $conn->connect_error . ']');
           }
-          $sql = mysqli_query($conn, 'SELECT id, storyName FROM tablefour');
+          $sql = mysqli_query($conn, 'SELECT id, epicName FROM tablethree');
           while($row = mysqli_fetch_array($sql))          
           {
             ?> 
-            <option><?php echo $row['id'] . '. ' . $row['storyName']?></option>
+            <option><?php echo $row['id'] . '. ' . $row['epicName']?></option>
             <?php
           }
           ?>
         </select>
       </div>
       <div class="col-lg-3">
-        <label class="control-label" for="task_priority">Task Priority</label>
-        <select class="form-control" name="task_priority">
+        <label class="control-label" for="story_priority">Story Priority</label>
+        <select class="form-control" name="story_priority">
           <option>Must</option>
           <option>Should</option>
           <option>Could</option>
           <option>Wont</option>
         </select>
       </div>
-      <div class="col-lg-3 form-group has-feedback">
-        <label class="control-label" for="task_estimation">Task Estimation (hrs.)</label>
-        <input type="text" class="form-control" name="task_estimation" pattern="^[0-9]{1,2}$" maxlength="2" required>
+      <div class="col-lg-4 form-group has-feedback">
+        <label class="control-label" for="story_estimation">Story Estimation (hrs.)</label>
+        <input type="text" class="form-control" name="story_estimation" pattern="^[0-9]{1,2}$" maxlength="2" required>
         <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
       </div>
     </div>
     <div class="row form-group has-feedback">
-      <button type="submit" class="btn btn-primary pull-right" id="submit_button">Create Task <span class="glyphicon glyphicon-plus"></button>
+      <button type="submit" class="btn btn-primary pull-right" id="submit_button">Create Story <span class="glyphicon glyphicon-plus"></button>
     </div>
   </form>
 </div>

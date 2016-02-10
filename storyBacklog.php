@@ -75,7 +75,14 @@
           {
             die('Unable to connect to database [' . $conn->connect_error . ']');
           }
-          $sql = mysqli_query($conn, 'SELECT * FROM tablefour');
+          if(isset($_GET['id']))
+          {
+            $sql = mysqli_query($conn, 'SELECT * FROM tablefour WHERE epic_id = '.$_GET['id']);
+          }
+          else
+          {
+            $sql = mysqli_query($conn, 'SELECT * FROM tablefour');
+          }
           while($row = mysqli_fetch_array($sql))          
           {
             ?>
@@ -83,19 +90,16 @@
                 <td><?php echo $row['id']?></td>
                 <td><?php echo $row['storyName']?></td>
                 <td><?php echo $row['storyDescription']?></td>
-                <td><?php echo $row['priority']?></td>
-                <td><?php echo $row['estimation']?></td>
+                <td><?php echo $row['storyPriority']?></td>
+                <td><?php echo $row['storyEstimation']?></td>
                 <td><?php echo $row['epic_id']?></td>
-                <td>priority</td>
-                <td>estimations</td>
-                <td>1</td>
                 <td>
-                  <a class="btn btn-info" id="expandButton" href="storyBacklog.php?id=<?php echo $row['id']?>">
+                  <a class="btn btn-info" id="expandButton" href="taskBacklog.php?id=<?php echo $row['id']?>">
                     Expand <span class="glyphicon glyphicon-arrow-right"></span>
                   </a>
                 </td>
                 <td>
-                  <a class="btn btn-danger" id="removeButton" href="epicRemove.php?id=<?php echo $row['id']?>">
+                  <a class="btn btn-danger" id="removeButton" href="storyRemove.php?id=<?php echo $row['id']?>">
                     Remove <span class="glyphicon glyphicon-remove"></span>
                   </a>
                 </td>
@@ -122,18 +126,37 @@
       <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
     </div>
     <div class="row">
+      <div class="col-lg-5">
+        <label class="control-label" for="story_epic">Epic</label>
+        <select class="form-control" name="story_epic">
+          <?php
+          $conn = new mysqli('localhost', 'root', '', 'tempdb');
+          if($conn->connect_errno > 0)
+          {
+            die('Unable to connect to database [' . $conn->connect_error . ']');
+          }
+          $sql = mysqli_query($conn, 'SELECT id, epicName FROM tablethree');
+          while($row = mysqli_fetch_array($sql))          
+          {
+            ?> 
+            <option><?php echo $row['id'] . '. ' . $row['epicName']?></option>
+            <?php
+          }
+          ?>
+        </select>
+      </div>
       <div class="col-lg-3">
-        <label class="control-label" for="storyPriority">Story Priority</label>
-        <select class="form-control" id="storyPriority">
+        <label class="control-label" for="story_priority">Story Priority</label>
+        <select class="form-control" name="story_priority">
           <option>Must</option>
           <option>Should</option>
           <option>Could</option>
-          <option>Won't</option>
+          <option>Wont</option>
         </select>
       </div>
       <div class="col-lg-4 form-group has-feedback">
-        <label class="control-label" for="storyEstimation">Story Estimation (hrs.)</label>
-        <input type="text" class="form-control" name="storyEstimation" pattern="^[0-9]{1,2}$" maxlength="2" required>
+        <label class="control-label" for="story_estimation">Story Estimation (hrs.)</label>
+        <input type="text" class="form-control" name="story_estimation" pattern="^[0-9]{1,2}$" maxlength="2" required>
         <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
       </div>
     </div>

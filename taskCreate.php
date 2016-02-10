@@ -52,6 +52,33 @@
 </nav>
   
 <div class="container">
+  <?php
+    $conn = new mysqli('localhost', 'root', '', 'tempdb');
+    if($conn->connect_errno > 0)
+    {
+      die('Unable to connect to database [' . $conn->connect_error . ']');
+    }
+
+    $task_name = $_POST["task_name"];
+    $task_description = $_POST["task_description"];
+    $task_priority = $_POST["task_priority"];
+    $task_estimation = $_POST["task_estimation"];
+    $task_story = $_POST["task_story"];
+
+    $sql = "INSERT INTO tablefive (taskName, taskDescription, taskPriority, taskEstimation, story_id) VALUES ('$task_name', '$task_description', '$task_priority', '$task_estimation', '$task_story')";
+      if ($conn->query($sql) === TRUE) 
+      {
+       echo "<div class='alert alert-success'>
+       <strong>Success!</strong> Task Successfully Created.
+       </div>";
+      } 
+      else 
+      {
+        echo "<div class='alert alert-failure'>
+        <strong>Error!</strong> " . $sql . "<br>" . $conn->error . "</div>";
+      }
+      $conn->close();
+    ?>
   <h3>Task Backlog</h3>
   <div class="table-responsive">        
     <table class="table">
@@ -73,14 +100,7 @@
           {
             die('Unable to connect to database [' . $conn->connect_error . ']');
           }
-          if(isset($_GET['id']))
-          {
-            $sql = mysqli_query($conn, 'SELECT * FROM tablefive WHERE story_id = '.$_GET['id']);
-          }
-          else
-          {
-            $sql = mysqli_query($conn, 'SELECT * FROM tablefive');
-          }
+          $sql = mysqli_query($conn, 'SELECT * FROM tablefive');
           while($row = mysqli_fetch_array($sql))          
           {
             ?>
