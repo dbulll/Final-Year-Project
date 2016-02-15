@@ -6,12 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css">
-  <script src="js/jquery-1.12.0.js"></script>
+  <script src="js/jquery-2.2.0.js"></script>
   <script src="js/validator.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
+
+<!-- Navigation Bar -->
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
@@ -37,8 +39,8 @@
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Planning<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="releasePlanning.html">Feature/Release Planning</a></li>
-            <li><a href="sprintPlanning.html">Sprint Planning</a></li>
+            <li><a href="releasePlanning.php">Feature/Release Planning</a></li>
+            <li><a href="sprintPlanning.php">Sprint Planning</a></li>
           </ul>
         </li>
         <li><a href="taskboard.html">Task Board</a></li>
@@ -50,38 +52,45 @@
     </div>
   </div>
 </nav>
-  
+
+<!-- Main Container -->
+
 <div class="container">
+
+<!-- PHP Code - 1.Insert new Story into the database -->
+
   <?php
-    $conn = new mysqli('localhost', 'root', '', 'tempdb');
-    if($conn->connect_errno > 0)
+    if(isset($_POST["story_name"]))
     {
-      die('Unable to connect to database [' . $conn->connect_error . ']');
-    }
-
-    $story_name = $_POST["story_name"];
-    $story_description = $_POST["story_description"];
-    $story_priority = $_POST["story_priority"];
-    $story_estimation = $_POST["story_estimation"];
-    $story_epic = $_POST["story_epic"];
-
-    $sql = "INSERT INTO tablefour (storyName, storyDescription, storyPriority, storyEstimation, epic_id) VALUES ('$story_name', '$story_description', '$story_priority', '$story_estimation', '$story_epic')";
+      $conn = new mysqli('localhost', 'root', '', 'tempdb');
+      if($conn->connect_errno > 0)
+      {
+        die('Unable to connect to database [' . $conn->connect_error . ']');
+      }
+      $story_name = $_POST["story_name"];
+      $story_description = $_POST["story_description"];
+      $story_priority = $_POST["story_priority"];
+      $story_estimation = $_POST["story_estimation"];
+      $story_epic = $_POST["story_epic"];
+      $sql = "INSERT INTO tablefour (storyName, storyDescription, storyPriority, storyEstimation, epic_id) VALUES ('$story_name', '$story_description', '$story_priority', '$story_estimation', '$story_epic')";
       if ($conn->query($sql) === TRUE) 
       {
-       echo "<div class='alert alert-success'>
-       <strong>Success!</strong> Story Successfully Created.
-       </div>";
+        echo "<div class='alert alert-success'><strong>Success!</strong> User Story has been successfully created.</div>";
       } 
       else 
       {
-        echo "<div class='alert alert-failure'>
-        <strong>Error!</strong> " . $sql . "<br>" . $conn->error . "</div>";
+        echo "<div class='alert alert-failure'><strong>Error!</strong> " . $sql . "<br>" . $conn->error . "</div>";
       }
       $conn->close();
-    ?>
+    }
+  ?>
+
   <h3>User Story Backlog</h3>
+
+<!-- List of Stories in Backlog -->
+
   <div class="table-responsive">        
-    <table class="table">
+    <table class="table table-striped">
       <thead>
         <tr>
           <th>Id</th>
@@ -96,6 +105,9 @@
         </tr>
       </thead>
       <tbody>
+
+<!-- PHP Code - 1.Grab list of Stories from the database. -->
+      
         <?php
           $conn = new mysqli('localhost', 'root', '', 'tempdb');
           if($conn->connect_errno > 0)
@@ -107,19 +119,19 @@
           {
             ?>
               <tr>
-                <td><?php echo $row['id']?></td>
-                <td><?php echo $row['storyName']?></td>
-                <td><?php echo $row['storyDescription']?></td>
-                <td><?php echo $row['storyPriority']?></td>
-                <td><?php echo $row['storyEstimation']?></td>
-                <td><?php echo $row['epic_id']?></td>
+                <td><?php echo $row['id'];?></td>
+                <td><?php echo $row['storyName'];?></td>
+                <td><?php echo $row['storyDescription'];?></td>
+                <td><?php echo $row['storyPriority'];?></td>
+                <td><?php echo $row['storyEstimation'];?></td>
+                <td><?php echo $row['epic_id'];?></td>
                 <td>
-                  <a class="btn btn-info" id="expandButton" href="taskBacklog.php?id=<?php echo $row['id']?>">
-                    Expand <span class="glyphicon glyphicon-arrow-right"></span>
+                  <a class="btn btn-info" id="tasksButton" href="taskBacklog.php?id=<?php echo $row['id'];?>">
+                    Tasks <span class="glyphicon glyphicon-arrow-right"></span>
                   </a>
                 </td>
                 <td>
-                  <a class="btn btn-danger" id="removeButton" href="storyRemove.php?id=<?php echo $row['id']?>">
+                  <a class="btn btn-danger" id="removeButton" href="storyRemove.php?id=<?php echo $row['id'];?>">
                     Remove <span class="glyphicon glyphicon-remove"></span>
                   </a>
                 </td>
@@ -133,6 +145,9 @@
 </div>
 
 <div class="container">
+
+<!-- Form for creating new Story -->
+
   <h3> Create New Story </h3>
   <form class="form-horizontal col-lg-8 col-lg-offset-2" id="storyCreationForm" data-toggle="validator" role="form" novalidate="true" action="storyCreate.php" method="post">
     <div class="row form-group has-feedback">
@@ -142,7 +157,7 @@
     </div>
     <div class="row form-group has-feedback">
       <label class="control-label" for="story_description">Story Description:</label>
-      <textarea type="text" class="form-control" name="story_description" maxlength="100" placeholder="Enter Story Description" rows="3" required></textarea>
+      <textarea type="text" class="form-control" name="story_description" maxlength="1000" placeholder="Enter Story Description" rows="3" required></textarea>
       <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
     </div>
     <div class="row">
@@ -159,7 +174,7 @@
           while($row = mysqli_fetch_array($sql))          
           {
             ?> 
-            <option><?php echo $row['id'] . '. ' . $row['epicName']?></option>
+            <option><?php echo $row['id'] . '. ' . $row['epicName'];?></option>
             <?php
           }
           ?>

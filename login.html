@@ -6,12 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css">
-  <script src="js/jquery-1.12.0.js"></script>
+  <script src="js/jquery-2.2.0.js"></script>
   <script src="js/validator.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
+
+<!-- Navigation Bar -->
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
@@ -37,8 +39,8 @@
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Planning<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="releasePlanning.html">Feature/Release Planning</a></li>
-            <li><a href="sprintPlanning.html">Sprint Planning</a></li>
+            <li><a href="releasePlanning.php">Feature/Release Planning</a></li>
+            <li><a href="sprintPlanning.php">Sprint Planning</a></li>
           </ul>
         </li>
         <li><a href="taskboard.html">Task Board</a></li>
@@ -51,64 +53,67 @@
   </div>
 </nav>
 
-  <!-- Account Icon and Sign Up Form-->
+<!-- Main Container -->
 
-  <div class="container">
-    <div class="row">
-      <span class="glyphicon glyphicon-user" style="display: block; font-size: 6em; text-align: center;"></span>
-    </div>
-    <div class="row">
-        <h2 class="" style="text-align: center;">Account Information</h2>
-    </div>
-    <form class="form-horizontal col-lg-offset-3" id="myForm" data-toggle="validator" role="form" novalidate="true" action="php/sign_up.php" method="post">
-      <div class="row">
-        <div class="form-group has-feedback col-lg-8">
-          <label class="control-label" for="first_name">First Name:</label>
-          <input type="text" class="form-control" name="first_name" pattern="^[A-z]{1,}$" maxlength="35" placeholder="Enter First Name" required>
-          <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group has-feedback col-lg-8">
-          <label class="control-label" for="last_name">Last Name:</label>
-          <input type="text" class="form-control" name="last_name" pattern="^[A-z]{1,}$" maxlength="35" placeholder="Enter Last Name" required>
-          <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group has-feedback col-lg-8">
-          <label class="control-label" for="user_name">Username:</label>
-          <input type="text" class="form-control" name="user_name" pattern="^[A-z0-9]{1,}$" maxlength="35" placeholder="Enter Username" required>
-          <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group has-feedback col-lg-8">
-          <label class="control-label" for="email">Email Address:</label>
-          <input type="email" class="form-control" name="email" placeholder="john_smith123@domain.com" required>
-          <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group has-feedback col-lg-8">
-          <label class="control-label" for="input_password">Password:</label>
-          <input type="password" class="form-control" name="input_password" id="input_password" placeholder="Min. 6 characters" data-minlength="6" required>
-          <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group has-feedback col-lg-8">
-          <label class="control-label" for="inputPassword">Re-Type Password:</label>
-          <input type="password" class="form-control" name="input_password_confirmation" data-match-error="These password's don't match!" data-match="#input_password" placeholder="Enter Password" required>
-          <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
-        </div>
-      </div>
-      <div class="row">
-        <div class="form-group has-feedback col-lg-1" style="margin-top: 1em;">
-          <button type="submit" class="btn btn-default" id="submit_button">Submit</button>
-        </div>
-      </div>
-    </form>
+<div class="container">
+
+<!-- Account Icon and Sign Up Form-->
+
+  <div class="row">
+    <span class="glyphicon glyphicon-user" style="display: block; font-size: 6em; text-align: center;"></span>
   </div>
+  <div class="row">
+      <h2 class="" style="text-align: center;">Account Information</h2>
+  </div>
+  <form class="form-horizontal col-lg-offset-3" id="myForm" data-toggle="validator" role="form" novalidate="true" action="php/sign_up.php" method="post">
+    <div class="row">
+      <div class="form-group has-feedback col-lg-8">
+        <label class="control-label" for="first_name">First Name:</label>
+        <input type="text" class="form-control" name="first_name" pattern="^[A-z]{1,}$" maxlength="35" placeholder="Enter First Name" required>
+        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group has-feedback col-lg-8">
+        <label class="control-label" for="last_name">Last Name:</label>
+        <input type="text" class="form-control" name="last_name" pattern="^[A-z]{1,}$" maxlength="35" placeholder="Enter Last Name" required>
+        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group has-feedback col-lg-8">
+        <label class="control-label" for="user_name">Username:</label>
+        <input type="text" class="form-control" name="user_name" pattern="^[A-z0-9]{1,}$" maxlength="35" placeholder="Enter Username" required>
+        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group has-feedback col-lg-8">
+        <label class="control-label" for="email">Email Address:</label>
+        <input type="email" class="form-control" name="email" placeholder="john_smith123@domain.com" required>
+        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group has-feedback col-lg-8">
+        <label class="control-label" for="input_password">Password:</label>
+        <input type="password" class="form-control" name="input_password" id="input_password" placeholder="Min. 6 characters" data-minlength="6" required>
+        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group has-feedback col-lg-8">
+        <label class="control-label" for="inputPassword">Re-Type Password:</label>
+        <input type="password" class="form-control" name="input_password_confirmation" data-match-error="These password's don't match!" data-match="#input_password" placeholder="Enter Password" required>
+        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group has-feedback col-lg-1" style="margin-top: 1em;">
+        <button type="submit" class="btn btn-default" id="submit_button">Submit</button>
+      </div>
+    </div>
+  </form>
+</div>
 </body>
 </html>

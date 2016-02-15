@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/jquery-2.2.0.js"></script>
+  <script src="js/validator.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
@@ -25,11 +27,11 @@
     </div>
     <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="index.html">Home</a></li>
+        <li><a href="index.html">Home</a></li>
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Backlog<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="epicBacklog.php">Epic Backlog</a></li>
+            <li class="active"><a href="epicBacklog.php">Epic Backlog</a></li>
             <li><a href="storyBacklog.php">User Story Backlog</a></li>
             <li><a href="taskbacklog.php">Task Backlog</a></li>
           </ul>
@@ -54,21 +56,65 @@
 <!-- Main Container -->
 
 <div class="container">
-  <h1>Website under contstruction</h1>
-  <p>Please bare in mind that the website is still being worked on and functionality may not be working as expected.</p>
-  <h1>Get Started Now</h1>
-  <h2>Start planning for your Scrum project by following the pages in the given order</h2>
-  <ul>
-    <li>Backlog - Complete </li>
-    <li>Epic Backlog - Complete </li>
-    <li>Story Backlog - Complete </li>
-    <li>Task Backlog - Complete </li>
-    <li>Planning</li>
-    <li>Release Planning - Complete </li>
-    <li>Sprint Planning</li>
-    <li>Task Board</li>
-    <li>Review</li>
-  </ul>
+  <h3>Sprint Planning</h3>
+  <div class="table-responsive col-lg-3">        
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>User Stories</th>
+          <th>Epic</th>
+        </tr>
+      </thead>
+      <tbody>
+      <?php
+        $conn = new mysqli('localhost', 'root', '', 'tempdb');
+        if($conn->connect_errno > 0)
+        {
+          die('Unable to connect to database [' . $conn->connect_error . ']');
+        }
+        $sql = mysqli_query($conn, 'SELECT * FROM tablefour');
+        while($row = mysqli_fetch_array($sql))
+        {
+          $sql2 = mysqli_query($conn, 'SELECT epicName FROM tableThree WHERE id = ' . $row['epic_id']);
+          $result = mysqli_fetch_array($sql2);
+          echo '     
+            <tr>
+              <td> '. $row['storyName'] .'</td>
+              <td> '. $result[0] .'</td>
+            </tr>';
+        }?>
+      </tbody>
+    </table> 
+  </div>
+  <div class="table-responsive col-lg-9">        
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <?php
+            $conn = new mysqli('localhost', 'root', '', 'tempdb');
+            if($conn->connect_errno > 0)
+            {
+              die('Unable to connect to database [' . $conn->connect_error . ']');
+            }
+            $sql = mysqli_query($conn, 'SELECT * FROM sprintTable WHERE release_id = ' . $_GET['id']);
+            while($row = mysqli_fetch_array($sql))
+            {
+              echo '<th>' . $row['id'] . '</th>';
+            }
+          ?>
+          <th>Sprint 1</th>
+          <th>Sprint 2</th>
+          <th>Sprint 3</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+        </tr>
+      </tbody>
+    </table> 
+  </div>
+
+
 </div>
 </body>
 </html>

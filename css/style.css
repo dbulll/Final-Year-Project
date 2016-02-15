@@ -12,7 +12,7 @@ body {
 	color: #9d9d9d;
 }
 
-.dropdown-menu>li>a:hover {
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus {
 	background-color: #222222;
 	color: white;
 }

@@ -33,13 +33,13 @@
           <ul class="dropdown-menu">
             <li><a href="epicBacklog.php">Epic Backlog</a></li>
             <li><a href="storyBacklog.php">User Story Backlog</a></li>
-            <li class="active"><a href="taskbacklog.php">Task Backlog</a></li>
+            <li><a href="taskbacklog.php">Task Backlog</a></li>
           </ul>
         </li>
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Planning<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="releasePlanning.php">Feature/Release Planning</a></li>
+            <li class="active"><a href="releasePlanning.php">Feature/Release Planning</a></li>
             <li><a href="sprintPlanning.php">Sprint Planning</a></li>
           </ul>
         </li>
@@ -57,52 +57,49 @@
 
 <div class="container">
 
-<!-- List of Tasks in Backlog -->
+<!-- List of Releases -->
 
-  <h3>Task Backlog</h3>
+  <h3>Release Planning</h3>
   <div class="table-responsive">        
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Id</th>
-          <th>Task Name</th>
-          <th>Task Description</th>
-          <th>Priority</th>
-          <th>Estimation (Hrs)</th>
-          <th>User Story Owner</th>
+          <th>Release Name</th>
+          <th>Release Description</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Sprint Length (days.)</th>
+          <th></th>
           <th></th>
         </tr>
       </thead>
       <tbody>
 
-<!-- PHP Code - 1.Grab list of Tasks from the database. -->
-      
+<!-- PHP Code - 1.Grab list of Releases from the database. -->
+
         <?php
           $conn = new mysqli('localhost', 'root', '', 'tempdb');
           if($conn->connect_errno > 0)
           {
             die('Unable to connect to database [' . $conn->connect_error . ']');
           }
-          if(isset($_GET['id']))
-          {
-            $sql = mysqli_query($conn, 'SELECT * FROM tablefive WHERE story_id = '.$_GET['id']);
-          }
-          else
-          {
-            $sql = mysqli_query($conn, 'SELECT * FROM tablefive');
-          }
+          $sql = mysqli_query($conn, 'SELECT * FROM releaseTable');
           while($row = mysqli_fetch_array($sql))          
           {
             ?>
               <tr>
-                <td><?php echo $row['id'];?></td>
-                <td><?php echo $row['taskName'];?></td>
-                <td><?php echo $row['taskDescription'];?></td>
-                <td><?php echo $row['taskPriority'];?></td>
-                <td><?php echo $row['taskEstimation'];?></td>
-                <td><?php echo $row['story_id'];?></td>
+                <td><?php echo $row['releaseName'];?></td>
+                <td><?php echo $row['releaseDescription'];?></td>
+                <td><?php echo $row['releaseStartDate'];?></td>
+                <td><?php echo $row['releaseEndDate'];?></td>
+                <td><?php echo $row['releaseSprintLength'];?></td>
                 <td>
-                  <a class="btn btn-danger" id="removeButton" href="taskRemove.php?id=<?php echo $row['id'];?>">
+                  <a class="btn btn-info" id="sprintsButton" href="sprintPlanning.php?id=<?php echo $row['id'];?>">
+                    Sprints <span class="glyphicon glyphicon-arrow-right"></span>
+                  </a>
+                </td>
+                <td>
+                  <a class="btn btn-danger" id="removeButton" href="releaseRemove.php?id=<?php echo $row['id'];?>">
                     Remove <span class="glyphicon glyphicon-remove"></span>
                   </a>
                 </td>
@@ -117,57 +114,37 @@
 
 <div class="container">
 
-<!-- Form for creating new Task -->
+<!-- Form for creating new Releases -->
 
-  <h3> Create New Task </h3>
-  <form class="form-horizontal col-lg-8 col-lg-offset-2" id="taskCreationForm" data-toggle="validator" role="form" novalidate="true" action="taskCreate.php" method="post">
+  <h3> Create New release </h3>
+  <form class="form-horizontal col-lg-8 col-lg-offset-2" id="releaseCreationForm" data-toggle="validator" role="form" novalidate="true" action="releaseCreate.php" method="post">
     <div class="row form-group has-feedback">
-      <label class="control-label" for="task_name">Task Name:</label>
-      <input type="text" class="form-control" name="task_name" pattern="^[A-z0-9\s]{1,}$" maxlength="30" placeholder="Enter Task Name" required>
+      <label class="control-label" for="release_name">Release Name:</label>
+      <input type="text" class="form-control" name="release_name" pattern="^[A-z0-9\s]{1,}$" maxlength="30" placeholder="Enter Release Name" required>
       <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
     </div>
     <div class="row form-group has-feedback">
-      <label class="control-label" for="task_description">Task Description:</label>
-      <textarea type="text" class="form-control" name="task_description" maxlength="1000" placeholder="Enter Task Description" rows="3" required></textarea>
+      <label class="control-label" for="release_description">Release Description:</label>
+      <textarea type="text" class="form-control" name="release_description" maxlength="1000" placeholder="Enter Release Description" rows="3" required></textarea>
       <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
     </div>
     <div class="row">
-      <div class="col-lg-6">
-        <label class="control-label" for="task_story">Story</label>
-        <select class="form-control" name="task_story">
-          <?php
-          $conn = new mysqli('localhost', 'root', '', 'tempdb');
-          if($conn->connect_errno > 0)
-          {
-            die('Unable to connect to database [' . $conn->connect_error . ']');
-          }
-          $sql = mysqli_query($conn, 'SELECT id, storyName FROM tablefour');
-          while($row = mysqli_fetch_array($sql))          
-          {
-            ?> 
-            <option><?php echo $row['id'] . '. ' . $row['storyName'];?></option>
-            <?php
-          }
-          ?>
-        </select>
+      <div class="col-lg-4">
+        <label class="control-label" for="release_start_date">Release Start Date</label>
+        <input type="date" class="form-control" name="release_start_date" required>
       </div>
-      <div class="col-lg-3">
-        <label class="control-label" for="task_priority">Task Priority</label>
-        <select class="form-control" name="task_priority">
-          <option>Must</option>
-          <option>Should</option>
-          <option>Could</option>
-          <option>Wont</option>
-        </select>
+      <div class="col-lg-4">
+        <label class="control-label" for="release_end_date">Release End Date</label>
+        <input type="date" class="form-control" name="release_end_date" required>
       </div>
-      <div class="col-lg-3 form-group has-feedback">
-        <label class="control-label" for="task_estimation">Task Estimation (hrs.)</label>
-        <input type="text" class="form-control" name="task_estimation" pattern="^[0-9]{1,2}$" maxlength="2" required>
+      <div class="col-lg-4 form-group has-feedback">
+        <label class="control-label" for="release_sprint_length">Sprint Length (days.)</label>
+        <input type="text" class="form-control" name="release_sprint_length" pattern="^[0-9]{1,2}$" maxlength="2" required>
         <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
       </div>
     </div>
     <div class="row form-group has-feedback">
-      <button type="submit" class="btn btn-primary pull-right" id="submit_button">Create Task <span class="glyphicon glyphicon-plus"></button>
+      <button type="submit" class="btn btn-primary pull-right" id="submit_button">Create Release <span class="glyphicon glyphicon-plus"></button>
     </div>
   </form>
 </div>

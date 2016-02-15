@@ -6,12 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css">
-  <script src="js/jquery-1.12.0.js"></script>
+  <script src="js/jquery-2.2.0.js"></script>
   <script src="js/validator.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
+
+<!-- Navigation Bar -->
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
@@ -37,8 +39,8 @@
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Planning<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="releasePlanning.html">Feature/Release Planning</a></li>
-            <li><a href="sprintPlanning.html">Sprint Planning</a></li>
+            <li><a href="releasePlanning.php">Feature/Release Planning</a></li>
+            <li><a href="sprintPlanning.php">Sprint Planning</a></li>
           </ul>
         </li>
         <li><a href="taskboard.html">Task Board</a></li>
@@ -50,11 +52,16 @@
     </div>
   </div>
 </nav>
-  
+
+<!-- Main Container -->
+
 <div class="container">
+
+<!-- List of Stories in Backlog -->
+
   <h3>User Story Backlog</h3>
   <div class="table-responsive">        
-    <table class="table">
+    <table class="table table-striped">
       <thead>
         <tr>
           <th>Id</th>
@@ -69,6 +76,9 @@
         </tr>
       </thead>
       <tbody>
+
+<!-- PHP Code - 1.Grab list of Stories from the database. -->
+
         <?php
           $conn = new mysqli('localhost', 'root', '', 'tempdb');
           if($conn->connect_errno > 0)
@@ -85,21 +95,24 @@
           }
           while($row = mysqli_fetch_array($sql))          
           {
+            $sql2 = mysqli_query($conn, "SELECT COUNT(*) FROM `tablefive` WHERE `story_id` = ".$row['id']);
+            $result = mysqli_fetch_array($sql2);
             ?>
               <tr>
-                <td><?php echo $row['id']?></td>
-                <td><?php echo $row['storyName']?></td>
-                <td><?php echo $row['storyDescription']?></td>
-                <td><?php echo $row['storyPriority']?></td>
-                <td><?php echo $row['storyEstimation']?></td>
-                <td><?php echo $row['epic_id']?></td>
+                <td><?php echo $row['id'];?></td>
+                <td><?php echo $row['storyName'];?></td>
+                <td><?php echo $row['storyDescription'];?></td>
+                <td><?php echo $row['storyPriority'];?></td>
+                <td><?php echo $row['storyEstimation'];?></td>
+                <td><?php echo $row['epic_id'];?></td>
+                <td><?php echo $result[0];?></td>
                 <td>
-                  <a class="btn btn-info" id="expandButton" href="taskBacklog.php?id=<?php echo $row['id']?>">
-                    Expand <span class="glyphicon glyphicon-arrow-right"></span>
+                  <a class="btn btn-info" id="tasksButton" href="taskBacklog.php?id=<?php echo $row['id'];?>">
+                    Tasks <span class="glyphicon glyphicon-arrow-right"></span>
                   </a>
                 </td>
                 <td>
-                  <a class="btn btn-danger" id="removeButton" href="storyRemove.php?id=<?php echo $row['id']?>">
+                  <a class="btn btn-danger" id="removeButton" href="storyRemove.php?id=<?php echo $row['id'];?>">
                     Remove <span class="glyphicon glyphicon-remove"></span>
                   </a>
                 </td>
@@ -113,6 +126,9 @@
 </div>
 
 <div class="container">
+
+<!-- Form for creating new Story -->
+
   <h3> Create New Story </h3>
   <form class="form-horizontal col-lg-8 col-lg-offset-2" id="storyCreationForm" data-toggle="validator" role="form" novalidate="true" action="storyCreate.php" method="post">
     <div class="row form-group has-feedback">
@@ -122,7 +138,7 @@
     </div>
     <div class="row form-group has-feedback">
       <label class="control-label" for="story_description">Story Description:</label>
-      <textarea type="text" class="form-control" name="story_description" maxlength="100" placeholder="Enter Story Description" rows="3" required></textarea>
+      <textarea type="text" class="form-control" name="story_description" maxlength="1000" placeholder="Enter Story Description" rows="3" required></textarea>
       <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
     </div>
     <div class="row">
@@ -139,7 +155,7 @@
           while($row = mysqli_fetch_array($sql))          
           {
             ?> 
-            <option><?php echo $row['id'] . '. ' . $row['epicName']?></option>
+            <option><?php echo $row['id'] . '. ' . $row['epicName'];?></option>
             <?php
           }
           ?>
