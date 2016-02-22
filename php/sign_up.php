@@ -4,7 +4,7 @@
 
 //make the connection
 
-$conn = new mysqli('localhost', 'admin', 'admin', 'tempdb'); //change user name to yours
+$conn = new mysqli('localhost', 'admin', 'admin', 'scrum_web_app_db'); //change user name to yours
 
 if($conn->connect_errno > 0){
 die('Unable to connect to database [' . $conn->connect_error . ']');

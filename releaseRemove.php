@@ -60,27 +60,27 @@
 <!-- PHP Code - 1.Remove Release by the given id. -->
 
   <?php
-    if(isset($_GET["id"]))
+    $conn = new mysqli('localhost', 'root', '', 'scrum_web_app_db');
+    if($conn->connect_errno > 0)
     {
-      $conn = new mysqli('localhost', 'root', '', 'tempdb');
-      if($conn->connect_errno > 0)
-      {
-        die('Unable to connect to database [' . $conn->connect_error . ']');
-      }
-      $sql = 'DELETE FROM releaseTable WHERE id = ' . $_GET["id"] .'';
+      die('Unable to connect to database [' . $conn->connect_error . ']');
+    }
+    if(isset($_GET['id']))
+    {
+      
+      $sql = 'DELETE FROM release_table WHERE id = ' . $_GET['id'];
       if ($conn->query($sql) === TRUE) 
       {
-       echo "<div class='alert alert-success'><strong>Success!</strong> Release has been successfully removed.</div>";
+       echo '<div class="alert alert-success"><strong>Success!</strong> Release has been successfully removed.</div>';
       } 
       else 
       {
-        echo "<div class='alert alert-failure'><strong>Error!</strong> " . $sql . "<br>" . $conn->error . "</div>";
+        echo '<div class="alert alert-failure"><strong>Error!</strong> ' . $sql . '<br>' . $conn->error . '</div>';
       }
-      $conn->close();
     }
   ?>
 
-  <h3>Release Planning</h3>
+  <h2>Release Planning</h2>
 
 <!-- List of Releases -->
 
@@ -102,21 +102,16 @@
 <!-- PHP Code - 1.Grab list of Releases from the database. -->
 
         <?php
-          $conn = new mysqli('localhost', 'root', '', 'tempdb');
-          if($conn->connect_errno > 0)
-          {
-            die('Unable to connect to database [' . $conn->connect_error . ']');
-          }
-          $sql = mysqli_query($conn, 'SELECT * FROM releaseTable');
+          $sql = mysqli_query($conn, 'SELECT * FROM release_table');
           while($row = mysqli_fetch_array($sql))          
           {
             ?>
               <tr>
-                <td><?php echo $row['releaseName'];?></td>
-                <td><?php echo $row['releaseDescription'];?></td>
-                <td><?php echo $row['releaseStartDate'];?></td>
-                <td><?php echo $row['releaseEndDate'];?></td>
-                <td><?php echo $row['releaseSprintLength'];?></td>
+                <td><?php echo $row['release_name'];?></td>
+                <td><?php echo $row['release_description'];?></td>
+                <td><?php echo $row['release_start_date'];?></td>
+                <td><?php echo $row['release_end_date'];?></td>
+                <td><?php echo $row['release_sprint_length'];?></td>
                 <td>
                   <a class="btn btn-info" id="sprintsButton" href="sprintPlanning.php?id=<?php echo $row['id'];?>">
                     Sprints <span class="glyphicon glyphicon-arrow-right"></span>
@@ -130,6 +125,7 @@
                 </tr>
             <?php
           }
+        $conn->close();
         ?>
       </tbody>
     </table> 
@@ -140,7 +136,7 @@
 
 <!-- Form for creating new Releases -->
 
-  <h3> Create New release </h3>
+  <h2> Create New release </h2>
   <form class="form-horizontal col-lg-8 col-lg-offset-2" id="releaseCreationForm" data-toggle="validator" role="form" novalidate="true" action="releaseCreate.php" method="post">
     <div class="row form-group has-feedback">
       <label class="control-label" for="release_name">Release Name:</label>

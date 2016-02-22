@@ -60,34 +60,30 @@
 <!-- PHP Code - 1.Insert new Epic into the database -->
 
 <?php
-  if(isset($_POST["epicName"]))
+  $conn = new mysqli('localhost', 'root', '', 'scrum_web_app_db');
+  if($conn->connect_errno > 0)
   {
-    $conn = new mysqli('localhost', 'root', '', 'tempdb');
-    if($conn->connect_errno > 0)
-    {
-      die('Unable to connect to database [' . $conn->connect_error . ']');
-    }
-    $epic_name = $_POST["epic_name"];
-    $epic_description = $_POST["epic_description"];
-    $sql = "INSERT INTO tablethree (epicName, epicDescription) VALUES ('$epic_name', '$epic_description')";
+    die('Unable to connect to database [' . $conn->connect_error . ']');
+  }
+  if(isset($_POST['epic_name']))
+  {
+    $epic_name = $_POST['epic_name'];
+    $epic_description = $_POST['epic_description'];
+    $sql = 'INSERT INTO epic_table (epic_name, epic_description) VALUES ("'. $epic_name .'", "'. $epic_description .'")';
     if ($conn->query($sql) === TRUE) 
     {
-     echo "<div class='alert alert-success'><strong>Success!</strong> Epic has been successfully created.</div>";
+     echo '<div class="alert alert-success"><strong>Success!</strong> Epic has been successfully created.</div>';
     } 
     else 
     {
-      echo "<div class='alert alert-failure'><strong>Error!</strong> " . $sql . "<br>" . $conn->error . "</div>";
+      echo '<div class="alert alert-failure"><strong>Error!</strong> ' . $sql . '<br>' . $conn->error . '</div>';
     }
-  }
-  else
-  {
-    $conn->close();
   }
 ?>
 
 <!-- List of Epics in the backlog -->
 
-  <h3>Epic's Backlog</h3>
+  <h2>Epic's Backlog</h2>
   <div class="table-responsive">
     <table class="table table-striped">
       <thead>
@@ -102,19 +98,14 @@
       <tbody>
 <!-- PHP Code - 1.Grab list of Epics from the database. 2.Count user child user stories. -->
         <?php
-          $conn = new mysqli('localhost', 'root', '', 'tempdb');
-          if($conn->connect_errno > 0)
-          {
-            die('Unable to connect to database [' . $conn->connect_error . ']');
-          }
-          $sql = mysqli_query($conn, 'SELECT * FROM tablethree');
+          $sql = mysqli_query($conn, 'SELECT * FROM epic_table');
           while($row = mysqli_fetch_array($sql))          
           {
-            $sql2 = mysqli_query($conn, "SELECT COUNT(*) FROM `tablefour` WHERE `epic_id` = ".$row['id']);
+            $sql2 = mysqli_query($conn, 'SELECT COUNT(*) FROM story_table WHERE epic_table_id = '. $row['id']);
             $result = mysqli_fetch_array($sql2); ?>
               <tr>
-                <td><?php echo $row['epicName']; ?></td>
-                <td><?php echo $row['epicDescription']; ?></td>
+                <td><?php echo $row['epic_name']; ?></td>
+                <td><?php echo $row['epic_description']; ?></td>
                 <td>
                   <?php echo $result[0]; ?>
                 </td>
@@ -131,6 +122,7 @@
                 </tr>
             <?php
           }
+        $conn->close();
         ?>
       </tbody>
     </table>
@@ -138,7 +130,7 @@
 
 <!-- Form for creating new epics-->
 
-  <h3> Create New Epic </h3>
+  <h2> Create New Epic </h2>
   <form class="form-horizontal col-lg-8 col-lg-offset-2" id="epicCreationForm" data-toggle="validator" role="form" novalidate="true" action="epicCreate.php" method="post">
     <div class="row form-group has-feedback">
       <label class="control-label" for="epic_name">Epic Name:</label>

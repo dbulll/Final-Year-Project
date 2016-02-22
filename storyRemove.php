@@ -60,35 +60,25 @@
 <!-- PHP Code - 1.Remove Story by the given id. -->
 
   <?php
-    if(isset($_GET["id"]))
+    $conn = new mysqli('localhost', 'root', '', 'scrum_web_app_db');
+    if($conn->connect_errno > 0)
     {
-      $conn = new mysqli('localhost', 'root', '', 'tempdb');
-      if($conn->connect_errno > 0)
-      {
-        die('Unable to connect to database [' . $conn->connect_error . ']');
-      }
-      $sql = 'DELETE FROM tablefive WHERE story_id = ' . $_GET["id"] ;
+      die('Unable to connect to database [' . $conn->connect_error . ']');
+    }
+    if(isset($_GET['id']))
+    {
+      $sql = 'DELETE FROM story_table WHERE id = ' . $_GET['id'];
       if ($conn->query($sql) === TRUE) 
       {
-       echo "<div class='alert alert-warning'><strong>Success!</strong> Related Tasks have been successfully removed.</div>";
+       echo '<div class="alert alert-success"><strong>Success!</strong> User Stories and related tasks have been successfully removed.</div>';
       } 
       else 
       {
-        echo "<div class='alert alert-failure'><strong>Error!</strong> " . $sql . "<br>" . $conn->error . "</div>";
+        echo '<div class="alert alert-failure"><strong>Error!</strong> ' . $sql . '<br>' . $conn->error . '</div>';
       }
-      $sql2 = 'DELETE FROM tablefour WHERE id = ' . $_GET["id"];
-      if ($conn->query($sql) === TRUE) 
-      {
-       echo "<div class='alert alert-success'><strong>Success!</strong> User Story has been successfully removed.</div>";
-      } 
-      else 
-      {
-        echo "<div class='alert alert-failure'><strong>Error!</strong> " . $sql . "<br>" . $conn->error . "</div>";
-      }
-      $conn->close();
     }
   ?>
-  <h3>User Story Backlog</h3>
+  <h2>User Story Backlog</h2>
 
 <!-- List of Stories in Backlog -->
 
@@ -96,12 +86,11 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Id</th>
           <th>Story Name</th>
           <th>Description</th>
           <th>Priority</th>
           <th>Estimation (Hrs)</th>
-          <th>Epic Owner</th>
+          <th>Epic ID</th>
           <th>Tasks (No.)</th>
           <th></th>
           <th></th>
@@ -111,37 +100,31 @@
 
 <!-- PHP Code - 1.Grab list of Stories from the database. -->
 
-        <?php
-          $conn = new mysqli('localhost', 'root', '', 'tempdb');
-          if($conn->connect_errno > 0)
-          {
-            die('Unable to connect to database [' . $conn->connect_error . ']');
-          }
-          $sql = mysqli_query($conn, 'SELECT * FROM tablefour');
-          while($row = mysqli_fetch_array($sql))          
-          {
-            ?>
-              <tr>
-                <td><?php echo $row['id'];?></td>
-                <td><?php echo $row['storyName'];?></td>
-                <td><?php echo $row['storyDescription'];?></td>
-                <td><?php echo $row['storyPriority'];?></td>
-                <td><?php echo $row['storyEstimation'];?></td>
-                <td><?php echo $row['epic_id'];?></td>
-                <td>
-                  <a class="btn btn-info" id="tasksButton" href="taskBacklog.php?id=<?php echo $row['id'];?>">
-                    Tasks <span class="glyphicon glyphicon-arrow-right"></span>
-                  </a>
-                </td>
-                <td>
-                  <a class="btn btn-danger" id="removeButton" href="storyRemove.php?id=<?php echo $row['id'];?>">
-                    Remove <span class="glyphicon glyphicon-remove"></span>
-                  </a>
-                </td>
-                </tr>
-            <?php
-          }
-        ?>
+      <?php
+        $sql = mysqli_query($conn, 'SELECT * FROM story_table');
+        while($row = mysqli_fetch_array($sql))          
+        {
+          ?>
+            <tr>
+              <td><?php echo $row['story_name'];?></td>
+              <td><?php echo $row['story_description'];?></td>
+              <td><?php echo $row['story_priority'];?></td>
+              <td><?php echo $row['story_estimation'];?></td>
+              <td><?php echo $row['epic_table_id'];?></td>
+              <td>
+                <a class="btn btn-info" id="tasksButton" href="taskBacklog.php?id=<?php echo $row['id'];?>">
+                  Tasks <span class="glyphicon glyphicon-arrow-right"></span>
+                </a>
+              </td>
+              <td>
+                <a class="btn btn-danger" id="removeButton" href="storyRemove.php?id=<?php echo $row['id'];?>">
+                  Remove <span class="glyphicon glyphicon-remove"></span>
+                </a>
+              </td>
+            </tr>
+      <?php
+        } 
+      ?>
       </tbody>
     </table> 
   </div>
@@ -151,7 +134,7 @@
 
 <!-- Form for creating new Story -->
 
-  <h3> Create New Story </h3>
+  <h2> Create New Story </h2>
   <form class="form-horizontal col-lg-8 col-lg-offset-2" id="storyCreationForm" data-toggle="validator" role="form" novalidate="true" action="storyCreate.php" method="post">
     <div class="row form-group has-feedback">
       <label class="control-label" for="story_name">Story Name:</label>
@@ -168,18 +151,12 @@
         <label class="control-label" for="story_epic">Epic</label>
         <select class="form-control" name="story_epic">
           <?php
-          $conn = new mysqli('localhost', 'root', '', 'tempdb');
-          if($conn->connect_errno > 0)
-          {
-            die('Unable to connect to database [' . $conn->connect_error . ']');
-          }
-          $sql = mysqli_query($conn, 'SELECT id, epicName FROM tablethree');
+          $sql = mysqli_query($conn, 'SELECT id, epic_name FROM epic_table');
           while($row = mysqli_fetch_array($sql))          
           {
-            ?> 
-            <option><?php echo $row['id'] . '. ' . $row['epicName'];?></option>
-            <?php
+            echo '<option value='. $row['id'] .'>'. $row['epic_name'].'</option>';
           }
+          $conn->close();
           ?>
         </select>
       </div>

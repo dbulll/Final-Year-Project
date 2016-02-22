@@ -60,32 +60,32 @@
 <!-- PHP Code - 1.Insert new Story into the database -->
 
   <?php
-    if(isset($_POST["story_name"]))
+    $conn = new mysqli('localhost', 'root', '', 'scrum_web_app_db');
+    if($conn->connect_errno > 0)
     {
-      $conn = new mysqli('localhost', 'root', '', 'tempdb');
-      if($conn->connect_errno > 0)
-      {
-        die('Unable to connect to database [' . $conn->connect_error . ']');
-      }
-      $story_name = $_POST["story_name"];
-      $story_description = $_POST["story_description"];
-      $story_priority = $_POST["story_priority"];
-      $story_estimation = $_POST["story_estimation"];
-      $story_epic = $_POST["story_epic"];
-      $sql = "INSERT INTO tablefour (storyName, storyDescription, storyPriority, storyEstimation, epic_id) VALUES ('$story_name', '$story_description', '$story_priority', '$story_estimation', '$story_epic')";
+      die('Unable to connect to database [' . $conn->connect_error . ']');
+    }
+    if(isset($_POST['story_name']))
+    {
+      $story_name = $_POST['story_name'];
+      $story_description = $_POST['story_description'];
+      $story_priority = $_POST['story_priority'];
+      $story_estimation = $_POST['story_estimation'];
+      $story_epic = $_POST['story_epic'];
+      $story_sprint_id = '0';
+      $sql = 'INSERT INTO story_table (story_name, story_description, story_priority, story_estimation, epic_table_id) VALUES ("'. $story_name .'", "'. $story_description .'", "'. $story_priority .'", '. $story_estimation .', '. $story_epic .')';
       if ($conn->query($sql) === TRUE) 
       {
-        echo "<div class='alert alert-success'><strong>Success!</strong> User Story has been successfully created.</div>";
+        echo '<div class="alert alert-success"><strong>Success!</strong> User Story has been successfully created.</div>';
       } 
       else 
       {
-        echo "<div class='alert alert-failure'><strong>Error!</strong> " . $sql . "<br>" . $conn->error . "</div>";
+        echo '<div class="alert alert-failure"><strong>Error!</strong> ' . $sql . '<br>' . $conn->error . '</div>';
       }
-      $conn->close();
     }
   ?>
 
-  <h3>User Story Backlog</h3>
+  <h2>User Story Backlog</h2>
 
 <!-- List of Stories in Backlog -->
 
@@ -93,12 +93,11 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Id</th>
           <th>Story Name</th>
           <th>Description</th>
           <th>Priority</th>
           <th>Estimation (Hrs)</th>
-          <th>Epic Owner</th>
+          <th>Epic ID</th>
           <th>Tasks (No.)</th>
           <th></th>
           <th></th>
@@ -109,22 +108,16 @@
 <!-- PHP Code - 1.Grab list of Stories from the database. -->
       
         <?php
-          $conn = new mysqli('localhost', 'root', '', 'tempdb');
-          if($conn->connect_errno > 0)
-          {
-            die('Unable to connect to database [' . $conn->connect_error . ']');
-          }
-          $sql = mysqli_query($conn, 'SELECT * FROM tablefour');
+          $sql = mysqli_query($conn, 'SELECT * FROM story_table');
           while($row = mysqli_fetch_array($sql))          
           {
             ?>
               <tr>
-                <td><?php echo $row['id'];?></td>
-                <td><?php echo $row['storyName'];?></td>
-                <td><?php echo $row['storyDescription'];?></td>
-                <td><?php echo $row['storyPriority'];?></td>
-                <td><?php echo $row['storyEstimation'];?></td>
-                <td><?php echo $row['epic_id'];?></td>
+                <td><?php echo $row['story_name'];?></td>
+                <td><?php echo $row['story_description'];?></td>
+                <td><?php echo $row['story_priority'];?></td>
+                <td><?php echo $row['story_estimation'];?></td>
+                <td><?php echo $row['epic_table_id'];?></td>
                 <td>
                   <a class="btn btn-info" id="tasksButton" href="taskBacklog.php?id=<?php echo $row['id'];?>">
                     Tasks <span class="glyphicon glyphicon-arrow-right"></span>
@@ -148,7 +141,7 @@
 
 <!-- Form for creating new Story -->
 
-  <h3> Create New Story </h3>
+  <h2> Create New Story </h2>
   <form class="form-horizontal col-lg-8 col-lg-offset-2" id="storyCreationForm" data-toggle="validator" role="form" novalidate="true" action="storyCreate.php" method="post">
     <div class="row form-group has-feedback">
       <label class="control-label" for="story_name">Story Name:</label>
@@ -165,18 +158,12 @@
         <label class="control-label" for="story_epic">Epic</label>
         <select class="form-control" name="story_epic">
           <?php
-          $conn = new mysqli('localhost', 'root', '', 'tempdb');
-          if($conn->connect_errno > 0)
-          {
-            die('Unable to connect to database [' . $conn->connect_error . ']');
-          }
-          $sql = mysqli_query($conn, 'SELECT id, epicName FROM tablethree');
+          $sql = mysqli_query($conn, 'SELECT id, epic_name FROM epic_table');
           while($row = mysqli_fetch_array($sql))          
           {
-            ?> 
-            <option><?php echo $row['id'] . '. ' . $row['epicName'];?></option>
-            <?php
+            echo '<option value='. $row['id'] .'>'. $row['epic_name'].'</option>';
           }
+          $conn->close();
           ?>
         </select>
       </div>

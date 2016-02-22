@@ -1,7 +1,7 @@
 <?php
 
 //make the connection
-$conn = new mysqli('localhost', 'root', '', 'tempdb'); //change user name to yours
+$conn = new mysqli('localhost', 'root', '', 'scrum_web_app_db'); //change user name to yours
 if($conn->connect_errno > 0)
 {
   die('Unable to connect to database [' . $conn->connect_error . ']');
@@ -12,7 +12,7 @@ if($conn->connect_errno > 0)
 //$email ="admin";
 //$password = "test123";
 
-$sql = "INSERT INTO tablethree(epicName, epicDescription) VALUES ('epictest134', 'epicsarecool')";
+$sql = "INSERT INTO epic_table(epicName, epicDescription) VALUES ('epictest134', 'epicsarecool')";
   if ($conn->query($sql) === TRUE) 
   {
    echo "New record created successfully";

@@ -21,6 +21,16 @@ body {
 	background-color: black;
 }
 
+.sPlanStory {
+	width: 150px;
+	height: 50px;
+	background-color: lavender;
+	border-style: solid;
+	text-align: center;
+	border-width: 1px;
+	margin: 5px;
+	border-radius: 5px;
+}
 /* End of Navigation CSS */
 
 /* CSS for Backlog */

@@ -59,7 +59,7 @@
 
 <!-- List of Tasks in Backlog -->
 
-  <h3>Task Backlog</h3>
+  <h2>Task Backlog</h2>
   <div class="table-responsive">        
     <table class="table table-striped">
       <thead>
@@ -78,29 +78,29 @@
 <!-- PHP Code - 1.Grab list of Tasks from the database. -->
       
         <?php
-          $conn = new mysqli('localhost', 'root', '', 'tempdb');
+          $conn = new mysqli('localhost', 'root', '', 'scrum_web_app_db');
           if($conn->connect_errno > 0)
           {
             die('Unable to connect to database [' . $conn->connect_error . ']');
           }
           if(isset($_GET['id']))
           {
-            $sql = mysqli_query($conn, 'SELECT * FROM tablefive WHERE story_id = '.$_GET['id']);
+            $sql = mysqli_query($conn, 'SELECT * FROM task_table WHERE story_table_id = '.$_GET['id']);
           }
           else
           {
-            $sql = mysqli_query($conn, 'SELECT * FROM tablefive');
+            $sql = mysqli_query($conn, 'SELECT * FROM task_table');
           }
           while($row = mysqli_fetch_array($sql))          
           {
             ?>
               <tr>
                 <td><?php echo $row['id'];?></td>
-                <td><?php echo $row['taskName'];?></td>
-                <td><?php echo $row['taskDescription'];?></td>
-                <td><?php echo $row['taskPriority'];?></td>
-                <td><?php echo $row['taskEstimation'];?></td>
-                <td><?php echo $row['story_id'];?></td>
+                <td><?php echo $row['task_name'];?></td>
+                <td><?php echo $row['task_description'];?></td>
+                <td><?php echo $row['task_priority'];?></td>
+                <td><?php echo $row['task_estimation'];?></td>
+                <td><?php echo $row['story_table_id'];?></td>
                 <td>
                   <a class="btn btn-danger" id="removeButton" href="taskRemove.php?id=<?php echo $row['id'];?>">
                     Remove <span class="glyphicon glyphicon-remove"></span>
@@ -119,7 +119,7 @@
 
 <!-- Form for creating new Task -->
 
-  <h3> Create New Task </h3>
+  <h2> Create New Task </h2>
   <form class="form-horizontal col-lg-8 col-lg-offset-2" id="taskCreationForm" data-toggle="validator" role="form" novalidate="true" action="taskCreate.php" method="post">
     <div class="row form-group has-feedback">
       <label class="control-label" for="task_name">Task Name:</label>
@@ -136,18 +136,12 @@
         <label class="control-label" for="task_story">Story</label>
         <select class="form-control" name="task_story">
           <?php
-          $conn = new mysqli('localhost', 'root', '', 'tempdb');
-          if($conn->connect_errno > 0)
-          {
-            die('Unable to connect to database [' . $conn->connect_error . ']');
-          }
-          $sql = mysqli_query($conn, 'SELECT id, storyName FROM tablefour');
+          $sql = mysqli_query($conn, 'SELECT id, story_name FROM story_table');
           while($row = mysqli_fetch_array($sql))          
           {
-            ?> 
-            <option><?php echo $row['id'] . '. ' . $row['storyName'];?></option>
-            <?php
+            echo '<option value='. $row['id'] .'>'. $row['story_name'].'</option>';
           }
+          $conn->close();
           ?>
         </select>
       </div>

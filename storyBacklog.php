@@ -59,17 +59,16 @@
 
 <!-- List of Stories in Backlog -->
 
-  <h3>User Story Backlog</h3>
+  <h2>User Story Backlog</h2>
   <div class="table-responsive">        
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Id</th>
           <th>Story Name</th>
           <th>Description</th>
           <th>Priority</th>
           <th>Estimation (Hrs)</th>
-          <th>Epic Owner</th>
+          <th>Epic ID</th>
           <th>Tasks (No.)</th>
           <th></th>
           <th></th>
@@ -80,31 +79,30 @@
 <!-- PHP Code - 1.Grab list of Stories from the database. -->
 
         <?php
-          $conn = new mysqli('localhost', 'root', '', 'tempdb');
+          $conn = new mysqli('localhost', 'root', '', 'scrum_web_app_db');
           if($conn->connect_errno > 0)
           {
             die('Unable to connect to database [' . $conn->connect_error . ']');
           }
           if(isset($_GET['id']))
           {
-            $sql = mysqli_query($conn, 'SELECT * FROM tablefour WHERE epic_id = '.$_GET['id']);
+            $sql = mysqli_query($conn, 'SELECT * FROM story_table WHERE epic_table_id = '.$_GET['id']);
           }
           else
           {
-            $sql = mysqli_query($conn, 'SELECT * FROM tablefour');
+            $sql = mysqli_query($conn, 'SELECT * FROM story_table');
           }
           while($row = mysqli_fetch_array($sql))          
           {
-            $sql2 = mysqli_query($conn, "SELECT COUNT(*) FROM `tablefive` WHERE `story_id` = ".$row['id']);
+            $sql2 = mysqli_query($conn, 'SELECT COUNT(*) FROM task_table WHERE story_table_id = ' .$row['id']);
             $result = mysqli_fetch_array($sql2);
             ?>
               <tr>
-                <td><?php echo $row['id'];?></td>
-                <td><?php echo $row['storyName'];?></td>
-                <td><?php echo $row['storyDescription'];?></td>
-                <td><?php echo $row['storyPriority'];?></td>
-                <td><?php echo $row['storyEstimation'];?></td>
-                <td><?php echo $row['epic_id'];?></td>
+                <td><?php echo $row['story_name'];?></td>
+                <td><?php echo $row['story_description'];?></td>
+                <td><?php echo $row['story_priority'];?></td>
+                <td><?php echo $row['story_estimation'];?></td>
+                <td><?php echo $row['epic_table_id'];?></td>
                 <td><?php echo $result[0];?></td>
                 <td>
                   <a class="btn btn-info" id="tasksButton" href="taskBacklog.php?id=<?php echo $row['id'];?>">
@@ -129,7 +127,7 @@
 
 <!-- Form for creating new Story -->
 
-  <h3> Create New Story </h3>
+  <h2> Create New Story </h2>
   <form class="form-horizontal col-lg-8 col-lg-offset-2" id="storyCreationForm" data-toggle="validator" role="form" novalidate="true" action="storyCreate.php" method="post">
     <div class="row form-group has-feedback">
       <label class="control-label" for="story_name">Story Name:</label>
@@ -146,18 +144,12 @@
         <label class="control-label" for="story_epic">Epic</label>
         <select class="form-control" name="story_epic">
           <?php
-          $conn = new mysqli('localhost', 'root', '', 'tempdb');
-          if($conn->connect_errno > 0)
-          {
-            die('Unable to connect to database [' . $conn->connect_error . ']');
-          }
-          $sql = mysqli_query($conn, 'SELECT id, epicName FROM tablethree');
+          $sql = mysqli_query($conn, 'SELECT id, epic_name FROM epic_table');
           while($row = mysqli_fetch_array($sql))          
           {
-            ?> 
-            <option><?php echo $row['id'] . '. ' . $row['epicName'];?></option>
-            <?php
+            echo '<option value='. $row['id'] .'>'. $row['epic_name'].'</option>';
           }
+          $conn->close();
           ?>
         </select>
       </div>

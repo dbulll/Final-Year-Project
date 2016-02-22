@@ -60,24 +60,23 @@
 <!-- PHP Code - 1.Insert new Release into the database -->
 
   <?php
+    // Create Connection
+    $conn = new mysqli('localhost', 'root', '', 'scrum_web_app_db');
+    if($conn->connect_errno > 0)
+    {
+      die('Unable to connect to database [' . $conn->connect_error . ']');
+    }
     if(isset($_POST['release_name']))
     {
-      // Create Connection
-      $conn = new mysqli('localhost', 'root', '', 'tempdb');
-      if($conn->connect_errno > 0)
-      {
-        die('Unable to connect to database [' . $conn->connect_error . ']');
-      }
-
       // Grab variables from the form POST
       $release_name = $_POST['release_name'];
       $release_description = $_POST['release_description'];
-      $release_start_date = $_POST['release_start_date'];
-      $release_end_date = $_POST['release_end_date'];
+      $release_start_date =  date('Y-m-d', strtotime($_POST['release_start_date']));
+      $release_end_date =  date('Y-m-d', strtotime($_POST['release_end_date']));
       $release_sprint_length = $_POST['release_sprint_length'];
 
       // This section of PHP adds a release to the releaseTable
-      $sql = 'INSERT INTO releaseTable (releaseName, releaseDescription, releaseStartDate, releaseEndDate, releaseSprintLength) VALUES ("'. $release_name .'", "'. $release_description .'", "'. $release_start_date .'","'. $release_end_date .'", '. $release_sprint_length .')';
+      $sql = 'INSERT INTO release_table (release_name, release_description, release_start_date, release_end_date, release_sprint_length) VALUES ("'. $release_name .'", "'. $release_description .'", "'. $release_start_date .'","'. $release_end_date .'", '. $release_sprint_length .')';
       if ($conn->query($sql) === TRUE) 
       {
        echo '<div class="alert alert-success"><strong>Success!</strong> Release has been successfully created.</div>';
@@ -94,36 +93,36 @@
       $rDiff = $rStart->diff($rEnd);
       $rDiffDays = $rDiff->days;
       $rSprints = floor($rDiffDays / $release_sprint_length);
-      $sprintStartDate = date('Y-m-d', strtotime($release_start_date));
+      $sprintStartDate = $release_start_date;
       $release_id = mysqli_insert_id($conn);
       $loop=0;
+      $success=0;
       while ($loop < $rSprints)
       { 
         //Create variables to insert into the Sprint Table. sprint name, start/end dates, release id.
         $sprintName = 'Sprint '. ($loop+1);
         $sprintStartDate = date('Y-m-d', strtotime($sprintStartDate));
         $sprintEndDate = date('Y-m-d', strtotime($sprintStartDate.'+ '.($release_sprint_length - 1).' days'));
-        $sprintSql = 'INSERT INTO sprintTable (sprintName, sprintDescription, sprintStartDate, sprintEndDate, release_id) VALUES ("'. $sprintName .'", "Test desc", "'. $sprintStartDate .'","'. $sprintEndDate .'", '. $release_id .')';
-        echo '<br>'.$sprintSql .' ';
+        $sprintSql = 'INSERT INTO sprint_table (sprint_name, sprint_description, sprint_start_date, sprint_end_date, release_table_id) VALUES ("'. $sprintName .'", "Test desc", "'. $sprintStartDate .'","'. $sprintEndDate .'", '. $release_id .')';
         if ($conn->query($sprintSql) === TRUE) 
         {
           echo '<div class="alert alert-success"><strong>Success!</strong> '. $sprintName .' has been successfully created.</div>';
+          $success = $success + 1;
         } 
         else 
         {
           echo '<div class="alert alert-failure"><strong>Error!</strong> ' . $sprintSql . '<br>' . $conn->error . '</div>';
         }
-        $sprintStartDate = $sprintStartDate.'+ '.$release_sprint_length.' days';
+        $sprintStartDate = $sprintStartDate.'+ '. $release_sprint_length .' days';
         $loop = $loop + 1;
-        echo '<br>';
       }
-      $conn->close();
+      echo $success;
     }
   ?>
 
 <!-- List of Releases -->
 
-  <h3>Release Planning</h3>
+  <h2>Release Planning</h2>
   <div class="table-responsive">        
     <table class="table table-striped">
       <thead>
@@ -142,21 +141,16 @@
 <!-- PHP Code - 1.Grab list of Releases from the database. -->
       
         <?php
-          $conn = new mysqli('localhost', 'root', '', 'tempdb');
-          if($conn->connect_errno > 0)
-          {
-            die('Unable to connect to database [' . $conn->connect_error . ']');
-          }
-          $sql = mysqli_query($conn, 'SELECT * FROM releaseTable');
+          $sql = mysqli_query($conn, 'SELECT * FROM release_table');
           while($row = mysqli_fetch_array($sql))          
           {
             ?>
               <tr>
-                <td><?php echo $row['releaseName'];?></td>
-                <td><?php echo $row['releaseDescription'];?></td>
-                <td><?php echo $row['releaseStartDate'];?></td>
-                <td><?php echo $row['releaseEndDate'];?></td>
-                <td><?php echo $row['releaseSprintLength'];?></td>
+                <td><?php echo $row['release_name'];?></td>
+                <td><?php echo $row['release_description'];?></td>
+                <td><?php echo $row['release_start_date'];?></td>
+                <td><?php echo $row['release_end_date'];?></td>
+                <td><?php echo $row['release_sprint_length'];?></td>
                 <td>
                   <a class="btn btn-info" id="sprintsButton" href="sprintPlanning.php?id=<?php echo $row['id'];?>">
                     Sprints <span class="glyphicon glyphicon-arrow-right"></span>
@@ -170,6 +164,7 @@
                 </tr>
             <?php
           }
+        $conn->close();
         ?>
       </tbody>
     </table> 
@@ -180,7 +175,7 @@
 
 <!-- Form for creating new Releases -->
 
-  <h3> Create New release </h3>
+  <h2> Create New release </h2>
   <form class="form-horizontal col-lg-8 col-lg-offset-2" id="releaseCreationForm" data-toggle="validator" role="form" novalidate="true" action="releaseCreate.php" method="post">
     <div class="row form-group has-feedback">
       <label class="control-label" for="release_name">Release Name:</label>
