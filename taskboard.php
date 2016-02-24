@@ -6,8 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css">
-  <script src="js/jquery-2.2.0.js"></script>
-  <script src="js/validator.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script type="text/javascript">
@@ -26,18 +24,18 @@
       ev.target.appendChild(document.getElementById(data));
     }
 
-    function releaseChange(ev){
-      var selectE = document.getElementById("release_list");
-      var releaseId = selectE.options[selectE.selectedIndex].value;
-      window.location.href = "sprintPlanning.php?id=".concat(releaseId);
+    function sprintChange(ev){
+      var selectE = document.getElementById("sprint_list");
+      var sprintId = selectE.options[selectE.selectedIndex].value;
+      window.location.href = "taskboard.php?id=".concat(sprintId);
     }
 
-    function sprintPost() {
+    function taskboardPost() {
       var form = document.createElement("form");
-      var releaseID = document.getElementById("releaseID");
+      var sprintID = document.getElementById("sprintID");
       var elements = document.getElementsByClassName("sPlanStory");
       form.setAttribute("method", "post");
-      form.setAttribute("action", "sprintPlanning.php?update=True&id=".concat(releaseID.getAttribute("name")));
+      form.setAttribute("action", "taskboard.php?update=True&id=".concat(sprintID.getAttribute("name")));
 
       for(var i=0; i<elements.length; i++) {
         var hiddenField = document.createElement("input");
@@ -83,7 +81,7 @@
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Backlog<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li class="active"><a href="epicBacklog.php">Epic Backlog</a></li>
+            <li><a href="epicBacklog.php">Epic Backlog</a></li>
             <li><a href="storyBacklog.php">User Story Backlog</a></li>
             <li><a href="taskbacklog.php">Task Backlog</a></li>
           </ul>
@@ -95,7 +93,7 @@
             <li><a href="sprintPlanning.php">Sprint Planning</a></li>
           </ul>
         </li>
-        <li><a href="taskboard.php">Task Board</a></li>
+        <li class="active"><a href="taskboard.php">Task Board</a></li>
         <li><a href="review.html">Review</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -104,9 +102,9 @@
     </div>
   </div>
 </nav>
-  
-<!-- Main Container -->
 
+<!-- Main Container -->
+  
 <div class="container">
   <div class="row">
     <?php
@@ -122,7 +120,7 @@
         foreach ($_POST as $key => $value)
         { 
           $totalDefined = $totalDefined + 1;   
-          $updateSprintSql = 'UPDATE story_table SET sprint_table_id = '. $value .' WHERE id = '. $key; 
+          $updateSprintSql = 'UPDATE story_table SET story_state = '. $value .' WHERE id = '. $key; 
           if ($conn->query($updateSprintSql) === TRUE) 
           {
             $successUpdate = $successUpdate + 1;
@@ -130,22 +128,22 @@
         }
         if($totalDefined == $successUpdate)
         {
-          echo '<div class="alert alert-success"><strong>Success!</strong> Sprints have been successfully updated</div>';
+          echo '<div class="alert alert-success"><strong>Success!</strong> Story states have been successfully updated</div>';
         } 
         else 
         {
-          echo '<div class="alert alert-failure"><strong>There was an Error updating some of the stories!</strong> ' . $updateSprintSql . '<br>' . $conn->error . '</div>';
+          echo '<div class="alert alert-failure"><strong>There was an Error updating some of the story states!</strong> ' . $updateSprintSql . '<br>' . $conn->error . '</div>';
         }
       }
     ?>
-    <h2>Sprint Planning</h2>
+    <h2>Task Board</h2>
   </div>
   <div class="row">
-    <p>Select the release which you would like to start planning:</p>
-    <select class="col-lg-4" id="release_list" onchange="releaseChange(event)">
-      <option value=0></option>
+    <p>Select the sprint for related taskboard</p>
+    <select class="col-lg-4" id="sprint_list" onchange="sprintChange(event)">
+    <option value=0></option>
     <?php
-      $sql = mysqli_query($conn, 'SELECT id, release_name FROM release_table');
+      $sql = mysqli_query($conn, 'SELECT id, sprint_name, release_table_id FROM sprint_table');
       while($row = mysqli_fetch_array($sql))          
       {
         echo '<option value='. $row['id'].' ';
@@ -156,7 +154,7 @@
             echo 'selected="selected"';
           }
         }
-        echo '>'. $row['release_name'].'</option>';
+        echo '>Release '. $row['release_table_id'].'. '.$row['sprint_name'].'</option>';
       }
     ?>
     </select>
@@ -165,21 +163,21 @@
     <div class="col-lg-8">
       <h3>
       <?php
-        $releaseName = 'Release';
+        $sprintName = 'Sprint';
         if(isset($_GET['id']))
         { 
-          $releaseNameSql = mysqli_query($conn, 'SELECT * FROM release_table WHERE id =' . $_GET['id']);
-          while($row = mysqli_fetch_array($releaseNameSql))
+          $sprintNameSql = mysqli_query($conn, 'SELECT * FROM sprint_table WHERE id =' . $_GET['id']);
+          while($row = mysqli_fetch_array($sprintNameSql))
           {
-            $releaseName = $row['release_name'];
+            $sprintName = $row['sprint_name'];
           }
         }
-        echo $releaseName;
+        echo $sprintName;
       ?>
-      <span id="releaseID" style="display:hidden;" name="<?php if(isset($_GET['id'])){echo $_GET['id'];?>"</span></h3>
+      <span id="sprintID" style="display:hidden;" name="<?php echo $_GET['id']; ?>"</span></h3>
     </div>
     <div class="col-lg-4">
-      <button class="btn btn-success pull-right" id="update_sprint" onclick="sprintPost()" style="margin-top: 10px;">Save Changes <span class="glyphicon glyphicon-save"></button>
+      <button class="btn btn-success pull-right" id="update_taskboard" onclick="taskboardPost()" style="margin-top: 10px;">Save Changes <span class="glyphicon glyphicon-save"></button>
     </div>
   </div>
   <div class="row">
@@ -187,41 +185,49 @@
       <table class="table table-bordered">
       <thead>
         <tr>
-        <th> Unplanned Stories </th>
-          <?php
-              $sql = mysqli_query($conn, 'SELECT * FROM sprint_table WHERE release_table_id = ' . $_GET['id']);
-              $sql2 = mysqli_query($conn, 'SELECT * FROM sprint_table WHERE release_table_id = ' . $_GET['id']);
-              while($row = mysqli_fetch_array($sql))
-              {
-                echo '<th>'. $row['sprint_name'] .'<br> '. date('d/m/Y', strtotime($row['sprint_start_date'])) .' - '. date('d/m/Y', strtotime($row['sprint_end_date'])) .'<br><a class="btn btn-default" id="go_to_sprint" href="taskboard.php?id='. $row['id'] .'" style="margin-top: 5px;">Go To <span class="glyphicon glyphicon-arrow-right"></button></th>';
-              }
-            
-          ?>
+          <th> Unplanned </th>
+          <th> To Do </th>
+          <th> In Progress </th>
+          <th> Done </th>   
         </tr>
       </thead>
       <tbody>
         <tr>
-        <td value="NULL" class="droptarget" ondrop="drop(event)" ondragover="allowDrop(event)">
           <?php
-            $sqlTemp = mysqli_query($conn, 'SELECT * FROM story_table WHERE sprint_table_id IS NULL');
-            while($rowTemp = mysqli_fetch_array($sqlTemp))
+            if(isset($_GET['id']))
             {
-              echo '<div class="sPlanStory" id="'. $rowTemp['id'] .'" draggable="true" ondragstart="drag(event)"><strong>'. $rowTemp['story_name'] .'</strong><br>Estimation: '. $rowTemp['story_estimation'] .' hrs<br>Priority: '. $rowTemp['story_priority'] .'</div>';   
-            }
-            echo '</td>';
-            while ($row2 = mysqli_fetch_array($sql2))
-            { 
-              $sql3 = mysqli_query($conn, 'SELECT * FROM story_table WHERE sprint_table_id = '. $row2['id']);
-              echo '<td value="'. $row2['id'] .'" class="droptarget" ondrop="drop(event)" ondragover="allowDrop(event)">'; 
-              while($row3 = mysqli_fetch_array($sql3))
+              $sqlUnplanned = mysqli_query($conn, 'SELECT * FROM story_table WHERE story_state = 0 AND sprint_table_id = '. $_GET['id']);
+              $sqlTodo = mysqli_query($conn, 'SELECT * FROM story_table WHERE story_state = 1 AND sprint_table_id = '. $_GET['id']);
+              $sqlInprogress = mysqli_query($conn, 'SELECT * FROM story_table WHERE story_state = 2 AND sprint_table_id = '. $_GET['id']);
+              $sqlDone = mysqli_query($conn, 'SELECT * FROM story_table WHERE story_state = 3 AND sprint_table_id = '. $_GET['id']);
+              echo '<td value=0 class="droptarget" id="taskStateTd" ondrop="drop(event)" ondragover="allowDrop(event)">';
+              while($rowUnplanned = mysqli_fetch_array($sqlUnplanned))
               {
-                echo '<div class="sPlanStory" id="'. $row3['id'] .'" draggable="true" ondragstart="drag(event)"><strong>'. $row3['story_name'] .'</strong><br>Estimation: '. $row3['story_estimation'] .' hrs<br>Priority: '. $row3['story_priority'] .'</div>';   
+                echo '<div class="sPlanStory" id="'. $rowUnplanned['id'] .'" draggable="true" ondragstart="drag(event)"><strong>'. $rowUnplanned['story_name'] .'</strong><br>Estimation: '. $rowUnplanned['story_estimation'] .' hrs<br>Priority: '. $rowUnplanned['story_priority'] .'</div>';   
               }
+              echo '</td>';
+              echo '<td value=1 class="droptarget" id="taskStateTd" ondrop="drop(event)" ondragover="allowDrop(event)">';
+              while($rowTodo = mysqli_fetch_array($sqlTodo))
+              {
+                echo '<div class="sPlanStory" id="'. $rowTodo['id'] .'" draggable="true" ondragstart="drag(event)"><strong>'. $rowTodo['story_name'] .'</strong><br>Estimation: '. $rowTodo['story_estimation'] .' hrs<br>Priority: '. $rowTodo['story_priority'] .'</div>';   
+              }
+              echo '</td>';
+              echo '<td value=2 class="droptarget" id="taskStateTd" ondrop="drop(event)" ondragover="allowDrop(event)">';
+              while ($rowInprogress = mysqli_fetch_array($sqlInprogress))
+              { 
+                echo '<div class="sPlanStory" id="'. $rowInprogress['id'] .'" draggable="true" ondragstart="drag(event)"><strong>'. $rowInprogress['story_name'] .'</strong><br>Estimation: '. $rowInprogress['story_estimation'] .' hrs<br>Priority: '. $rowInprogress['story_priority'] .'</div>'; 
+              }
+              echo '</td>';
+              echo '<td value=3 class="droptarget" id="taskStateTd" ondrop="drop(event)" ondragover="allowDrop(event)">';
+              while ($rowDone = mysqli_fetch_array($sqlDone))
+              { 
+                echo '<div class="sPlanStory" id="'. $rowDone['id'] .'" draggable="true" ondragstart="drag(event)"><strong>'. $rowDone['story_name'] .'</strong><br>Estimation: '. $rowDone['story_estimation'] .' hrs<br>Priority: '. $rowDone['story_priority'] .'</div>'; 
+              }
+              echo '</td>';
             }
-          }
           $conn->close();
           ?>
-          </td>
+            </td>
         </tr>
       </tbody>
       </table>
@@ -229,5 +235,6 @@
     </div>
   </div>
 </div>
+</td>
 </body>
 </html>

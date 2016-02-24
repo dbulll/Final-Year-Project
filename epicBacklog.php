@@ -43,7 +43,7 @@
             <li><a href="sprintPlanning.php">Sprint Planning</a></li>
           </ul>
         </li>
-        <li><a href="taskBoard.html">Task Board</a></li>
+        <li><a href="taskboard.php">Task Board</a></li>
         <li><a href="review.html">Review</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -56,6 +56,8 @@
 <!-- Main Container -->
 
 <div class="container">
+<?php if(isset($_POST['epic_name'])){include 'epicCreate.php';}?>
+<?php if(isset($_GET['id'])){include 'epicRemove.php';}?>
 
 <!-- List of Epics in the backlog -->
 
@@ -72,39 +74,7 @@
         </tr>
       </thead>
       <tbody>
-<!-- PHP Code - 1.Grab list of Epics from the database. 2.Count user child user stories. -->
-        <?php
-          $conn = new mysqli('localhost', 'root', '', 'scrum_web_app_db');
-          if($conn->connect_errno > 0)
-          {
-            die('Unable to connect to database [' . $conn->connect_error . ']');
-          }
-          $sql = mysqli_query($conn, 'SELECT * FROM epic_table');
-          while($row = mysqli_fetch_array($sql))          
-          {
-            $sql2 = mysqli_query($conn, "SELECT COUNT(*) FROM `story_table` WHERE `epic_table_id` = ".$row['id']);
-            $result = mysqli_fetch_array($sql2); ?>
-              <tr>
-                <td><?php echo $row['epic_name']; ?></td>
-                <td><?php echo $row['epic_description']; ?></td>
-                <td>
-                  <?php echo $result[0]; ?>
-                </td>
-                <td>
-                  <a class="btn btn-info" id="storiesButton" href="storyBacklog.php?id=<?php echo $row['id'];?>">
-                    Stories <span class="glyphicon glyphicon-arrow-right"></span>
-                  </a>
-                </td>
-                <td>
-                  <a class="btn btn-danger" id="removeButton" href="epicRemove.php?id=<?php echo $row['id'];?>">
-                    Remove <span class="glyphicon glyphicon-remove"></span>
-                  </a>
-                </td>
-                </tr>
-            <?php
-          }
-        $conn->close();
-        ?>
+        <?php include 'epicList.php' ?>
       </tbody>
     </table> 
   </div>
@@ -112,7 +82,7 @@
 <!-- Form for creating new epics-->
 
   <h2> Create New Epic </h2>
-  <form class="form-horizontal col-lg-8 col-lg-offset-2" id="epicCreationForm" data-toggle="validator" role="form" novalidate="true" action="epicCreate.php" method="post">
+  <form class="form-horizontal col-lg-8 col-lg-offset-2" id="epicCreationForm" data-toggle="validator" role="form" novalidate="true" action="epicBacklog.php" method="post">
     <div class="row form-group has-feedback">
       <label class="control-label" for="epic_name">Epic Name:</label>
       <input type="text" class="form-control" name="epic_name" pattern="^[A-z0-9\s]{1,}$" maxlength="30" placeholder="Enter Epic Name" required>

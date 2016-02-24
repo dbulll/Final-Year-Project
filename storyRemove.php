@@ -43,7 +43,7 @@
             <li><a href="sprintPlanning.php">Sprint Planning</a></li>
           </ul>
         </li>
-        <li><a href="taskboard.html">Task Board</a></li>
+        <li><a href="taskboard.php">Task Board</a></li>
         <li><a href="review.html">Review</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">

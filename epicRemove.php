@@ -43,7 +43,7 @@
             <li><a href="sprintPlanning.php">Sprint Planning</a></li>
           </ul>
         </li>
-        <li><a href="taskBoard.html">Task Board</a></li>
+        <li><a href="taskboard.php">Task Board</a></li>
         <li><a href="review.html">Review</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -94,34 +94,7 @@
         </tr>
       </thead>
       <tbody>
-<!-- PHP Code - 1.Grab list of Epics from the database. 2.Count user child user stories. -->
-        <?php
-          $sql = mysqli_query($conn, 'SELECT * FROM epic_table');
-          while($row = mysqli_fetch_array($sql))          
-          {
-            $sql2 = mysqli_query($conn, "SELECT COUNT(*) FROM `story_table` WHERE `epic_table_id` = ".$row['id']);
-            $result = mysqli_fetch_array($sql2); ?>
-              <tr>
-                <td><?php echo $row['epic_name']; ?></td>
-                <td><?php echo $row['epic_description']; ?></td>
-                <td>
-                  <?php echo $result[0]; ?>
-                </td>
-                <td>
-                  <a class="btn btn-info" id="storiesButton" href="storyBacklog.php?id=<?php echo $row['id'];?>">
-                    Stories <span class="glyphicon glyphicon-arrow-right"></span>
-                  </a>
-                </td>
-                <td>
-                  <a class="btn btn-danger" id="removeButton" href="epicRemove.php?id=<?php echo $row['id'];?>">
-                    Remove <span class="glyphicon glyphicon-remove"></span>
-                  </a>
-                </td>
-                </tr>
-            <?php
-          }
-        $conn->close();
-        ?>
+        <?php include 'epicList.php' ?>
       </tbody>
     </table>
   </div>
