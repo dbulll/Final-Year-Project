@@ -21,8 +21,8 @@ body {
 	background-color: black;
 }
 
-.sPlanStory {
-	width: 150px;
+.sPlanStory, .sPlanTask {
+	width: 250px;
 	height: auto;
 	background-color: lavender;
 	border-style: solid;
@@ -40,7 +40,7 @@ body {
 /* End of Navigation CSS */
 
 /* CSS for Backlog */
-td,th {
+th,td {
 	text-align: center;
 }
 

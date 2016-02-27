@@ -48,7 +48,7 @@
           <ul class="dropdown-menu">
             <li class="active"><a href="epicBacklog.php">Epic Backlog</a></li>
             <li><a href="storyBacklog.php">User Story Backlog</a></li>
-            <li><a href="taskbacklog.php">Task Backlog</a></li>
+            <li><a href="taskBacklog.php">Task Backlog</a></li>
           </ul>
         </li>
         <li class="dropdown">
@@ -59,7 +59,7 @@
           </ul>
         </li>
         <li><a href="taskboard.php">Task Board</a></li>
-        <li><a href="review.html">Review</a></li>
+        <li><a href="review.php">Review</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="login.html"><span class="glyphicon glyphicon-user"></span> Sign Up / Sign In</a></li>

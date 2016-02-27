@@ -33,7 +33,7 @@
           <ul class="dropdown-menu">
             <li><a href="epicBacklog.php">Epic Backlog</a></li>
             <li><a href="storyBacklog.php">User Story Backlog</a></li>
-            <li><a href="taskbacklog.php">Task Backlog</a></li>
+            <li><a href="taskBacklog.php">Task Backlog</a></li>
           </ul>
         </li>
         <li class="dropdown">
@@ -44,7 +44,7 @@
           </ul>
         </li>
         <li><a href="taskboard.php">Task Board</a></li>
-        <li><a href="review.html">Review</a></li>
+        <li><a href="review.php">Review</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="login.html"><span class="glyphicon glyphicon-user"></span> Sign Up / Sign In</a></li>
@@ -57,6 +57,11 @@
 
 <div class="container">
 
+<?php
+  include 'php/connectionStart.php'; 
+  if(isset($_POST['release_name'])){include 'php/releaseCreate.php';}
+  if(isset($_GET['remove'])){include 'php/releaseRemove.php';}
+?>
 <!-- List of Releases -->
 
   <h2>Release Planning</h2>
@@ -74,40 +79,7 @@
         </tr>
       </thead>
       <tbody>
-
-<!-- PHP Code - 1.Grab list of Releases from the database. -->
-
-        <?php
-          $conn = new mysqli('localhost', 'root', '', 'scrum_web_app_db');
-          if($conn->connect_errno > 0)
-          {
-            die('Unable to connect to database [' . $conn->connect_error . ']');
-          }
-          $sql = mysqli_query($conn, 'SELECT * FROM release_table');
-          while($row = mysqli_fetch_array($sql))          
-          {
-            ?>
-              <tr>
-                <td><?php echo $row['release_name'];?></td>
-                <td><?php echo $row['release_description'];?></td>
-                <td><?php echo $row['release_start_date'];?></td>
-                <td><?php echo $row['release_end_date'];?></td>
-                <td><?php echo $row['release_sprint_length'];?></td>
-                <td>
-                  <a class="btn btn-info" id="sprintsButton" href="sprintPlanning.php?id=<?php echo $row['id'];?>">
-                    Sprints <span class="glyphicon glyphicon-arrow-right"></span>
-                  </a>
-                </td>
-                <td>
-                  <a class="btn btn-danger" id="removeButton" href="releaseRemove.php?id=<?php echo $row['id'];?>">
-                    Remove <span class="glyphicon glyphicon-remove"></span>
-                  </a>
-                </td>
-                </tr>
-            <?php
-          }
-        $conn->close();
-        ?>
+      <?php include 'php/releaseList.php'; ?>
       </tbody>
     </table> 
   </div>
@@ -118,7 +90,7 @@
 <!-- Form for creating new Releases -->
 
   <h2> Create New release </h2>
-  <form class="form-horizontal col-lg-8 col-lg-offset-2" id="releaseCreationForm" data-toggle="validator" role="form" novalidate="true" action="releaseCreate.php" method="post">
+  <form class="form-horizontal col-lg-8 col-lg-offset-2" id="releaseCreationForm" data-toggle="validator" role="form" novalidate="true" action="releasePlanning.php" method="post">
     <div class="row form-group has-feedback">
       <label class="control-label" for="release_name">Release Name:</label>
       <input type="text" class="form-control" name="release_name" pattern="^[A-z0-9\s]{1,}$" maxlength="30" placeholder="Enter Release Name" required>

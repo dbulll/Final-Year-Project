@@ -33,7 +33,7 @@
           <ul class="dropdown-menu">
             <li><a href="epicBacklog.php">Epic Backlog</a></li>
             <li class="active"><a href="storyBacklog.php">User Story Backlog</a></li>
-            <li><a href="taskbacklog.php">Task Backlog</a></li>
+            <li><a href="taskBacklog.php">Task Backlog</a></li>
           </ul>
         </li>
         <li class="dropdown">
@@ -44,7 +44,7 @@
           </ul>
         </li>
         <li><a href="taskboard.php">Task Board</a></li>
-        <li><a href="review.html">Review</a></li>
+        <li><a href="review.php">Review</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="login.html"><span class="glyphicon glyphicon-user"></span> Sign Up / Sign In</a></li>
@@ -56,6 +56,19 @@
 <!-- Main Container -->
 
 <div class="container">
+
+<div class="row">
+  <a class="btn btn-info" id="epicBacklogButton" href="epicBacklog.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Epic Backlog
+  </a>
+</div>
+
+<!-- Start a connectin and check for actions -->
+
+<?php 
+  include 'php/connectionStart.php';
+  if(isset($_POST['story_name'])){include 'php/storyCreate.php';}
+  if(isset($_GET['remove'])){include 'php/storyRemove.php';}
+?>
 
 <!-- List of Stories in Backlog -->
 
@@ -75,49 +88,7 @@
         </tr>
       </thead>
       <tbody>
-
-<!-- PHP Code - 1.Grab list of Stories from the database. -->
-
-        <?php
-          $conn = new mysqli('localhost', 'root', '', 'scrum_web_app_db');
-          if($conn->connect_errno > 0)
-          {
-            die('Unable to connect to database [' . $conn->connect_error . ']');
-          }
-          if(isset($_GET['id']))
-          {
-            $sql = mysqli_query($conn, 'SELECT * FROM story_table WHERE epic_table_id = '.$_GET['id']);
-          }
-          else
-          {
-            $sql = mysqli_query($conn, 'SELECT * FROM story_table');
-          }
-          while($row = mysqli_fetch_array($sql))          
-          {
-            $sql2 = mysqli_query($conn, 'SELECT COUNT(*) FROM task_table WHERE story_table_id = ' .$row['id']);
-            $result = mysqli_fetch_array($sql2);
-            ?>
-              <tr>
-                <td><?php echo $row['story_name'];?></td>
-                <td><?php echo $row['story_description'];?></td>
-                <td><?php echo $row['story_priority'];?></td>
-                <td><?php echo $row['story_estimation'];?></td>
-                <td><?php echo $row['epic_table_id'];?></td>
-                <td><?php echo $result[0];?></td>
-                <td>
-                  <a class="btn btn-info" id="tasksButton" href="taskBacklog.php?id=<?php echo $row['id'];?>">
-                    Tasks <span class="glyphicon glyphicon-arrow-right"></span>
-                  </a>
-                </td>
-                <td>
-                  <a class="btn btn-danger" id="removeButton" href="storyRemove.php?id=<?php echo $row['id'];?>">
-                    Remove <span class="glyphicon glyphicon-remove"></span>
-                  </a>
-                </td>
-                </tr>
-            <?php
-          }
-        ?>
+        <?php include 'php/storyList.php' ?>
       </tbody>
     </table> 
   </div>
@@ -128,7 +99,7 @@
 <!-- Form for creating new Story -->
 
   <h2> Create New Story </h2>
-  <form class="form-horizontal col-lg-8 col-lg-offset-2" id="storyCreationForm" data-toggle="validator" role="form" novalidate="true" action="storyCreate.php" method="post">
+  <form class="form-horizontal col-lg-8 col-lg-offset-2" id="storyCreationForm" data-toggle="validator" role="form" novalidate="true" action="storyBacklog.php<?php if(isset($_GET['epic_id'])){echo '?epic_id='. $_GET["epic_id"];}?>" method="post">
     <div class="row form-group has-feedback">
       <label class="control-label" for="story_name">Story Name:</label>
       <input type="text" class="form-control" name="story_name" pattern="^[A-z0-9\s]{1,}$" maxlength="30" placeholder="Enter Story Name" required>
@@ -156,10 +127,10 @@
       <div class="col-lg-3">
         <label class="control-label" for="story_priority">Story Priority</label>
         <select class="form-control" name="story_priority">
-          <option>Must</option>
-          <option>Should</option>
-          <option>Could</option>
-          <option>Wont</option>
+          <option>MUST</option>
+          <option>SHOULD</option>
+          <option>COULD</option>
+          <option>WONT</option>
         </select>
       </div>
       <div class="col-lg-4 form-group has-feedback">

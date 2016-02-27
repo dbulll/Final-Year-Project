@@ -29,7 +29,7 @@
     function releaseChange(ev){
       var selectE = document.getElementById("release_list");
       var releaseId = selectE.options[selectE.selectedIndex].value;
-      window.location.href = "sprintPlanning.php?id=".concat(releaseId);
+      window.location.href = "sprintPlanning.php?release_id=".concat(releaseId);
     }
 
     function sprintPost() {
@@ -37,7 +37,7 @@
       var releaseID = document.getElementById("releaseID");
       var elements = document.getElementsByClassName("sPlanStory");
       form.setAttribute("method", "post");
-      form.setAttribute("action", "sprintPlanning.php?update=True&id=".concat(releaseID.getAttribute("name")));
+      form.setAttribute("action", "sprintPlanning.php?update=True&release_id=".concat(releaseID.getAttribute("name")));
 
       for(var i=0; i<elements.length; i++) {
         var hiddenField = document.createElement("input");
@@ -85,7 +85,7 @@
           <ul class="dropdown-menu">
             <li class="active"><a href="epicBacklog.php">Epic Backlog</a></li>
             <li><a href="storyBacklog.php">User Story Backlog</a></li>
-            <li><a href="taskbacklog.php">Task Backlog</a></li>
+            <li><a href="taskBacklog.php">Task Backlog</a></li>
           </ul>
         </li>
         <li class="dropdown">
@@ -96,7 +96,7 @@
           </ul>
         </li>
         <li><a href="taskboard.php">Task Board</a></li>
-        <li><a href="review.html">Review</a></li>
+        <li><a href="review.php">Review</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="login.html"><span class="glyphicon glyphicon-user"></span> Sign Up / Sign In</a></li>
@@ -149,9 +149,9 @@
       while($row = mysqli_fetch_array($sql))          
       {
         echo '<option value='. $row['id'].' ';
-        if(isset($_GET['id']))
+        if(isset($_GET['release_id']))
         {
-          if($_GET['id'] == $row['id'])
+          if($_GET['release_id'] == $row['id'])
           {
             echo 'selected="selected"';
           }
@@ -166,9 +166,9 @@
       <h3>
       <?php
         $releaseName = 'Release';
-        if(isset($_GET['id']))
+        if(isset($_GET['release_id']))
         { 
-          $releaseNameSql = mysqli_query($conn, 'SELECT * FROM release_table WHERE id =' . $_GET['id']);
+          $releaseNameSql = mysqli_query($conn, 'SELECT * FROM release_table WHERE id =' . $_GET['release_id']);
           while($row = mysqli_fetch_array($releaseNameSql))
           {
             $releaseName = $row['release_name'];
@@ -176,7 +176,7 @@
         }
         echo $releaseName;
       ?>
-      <span id="releaseID" style="display:hidden;" name="<?php if(isset($_GET['id'])){echo $_GET['id'];?>"</span></h3>
+      <span id="releaseID" style="display:hidden;" name="<?php if(isset($_GET['release_id'])){echo $_GET['release_id'];?>"</span></h3>
     </div>
     <div class="col-lg-4">
       <button class="btn btn-success pull-right" id="update_sprint" onclick="sprintPost()" style="margin-top: 10px;">Save Changes <span class="glyphicon glyphicon-save"></button>
@@ -189,11 +189,11 @@
         <tr>
         <th> Unplanned Stories </th>
           <?php
-              $sql = mysqli_query($conn, 'SELECT * FROM sprint_table WHERE release_table_id = ' . $_GET['id']);
-              $sql2 = mysqli_query($conn, 'SELECT * FROM sprint_table WHERE release_table_id = ' . $_GET['id']);
+              $sql = mysqli_query($conn, 'SELECT * FROM sprint_table WHERE release_table_id = ' . $_GET['release_id']);
+              $sql2 = mysqli_query($conn, 'SELECT * FROM sprint_table WHERE release_table_id = ' . $_GET['release_id']);
               while($row = mysqli_fetch_array($sql))
               {
-                echo '<th>'. $row['sprint_name'] .'<br> '. date('d/m/Y', strtotime($row['sprint_start_date'])) .' - '. date('d/m/Y', strtotime($row['sprint_end_date'])) .'<br><a class="btn btn-default" id="go_to_sprint" href="taskboard.php?id='. $row['id'] .'" style="margin-top: 5px;">Go To <span class="glyphicon glyphicon-arrow-right"></button></th>';
+                echo '<th>'. $row['sprint_name'] .'<br> '. date('d/m/Y', strtotime($row['sprint_start_date'])) .' - '. date('d/m/Y', strtotime($row['sprint_end_date'])) .'<br><a class="btn btn-default" id="go_to_sprint" href="taskboard.php?sprint_id='. $row['id'] .'" style="margin-top: 5px;">Go To <span class="glyphicon glyphicon-arrow-right"></a></th>';
               }
             
           ?>

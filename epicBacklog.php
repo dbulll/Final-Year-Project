@@ -33,7 +33,7 @@
           <ul class="dropdown-menu">
             <li class="active"><a href="epicBacklog.php">Epic Backlog</a></li>
             <li><a href="storyBacklog.php">User Story Backlog</a></li>
-            <li><a href="taskbacklog.php">Task Backlog</a></li>
+            <li><a href="taskBacklog.php">Task Backlog</a></li>
           </ul>
         </li>
         <li class="dropdown">
@@ -44,7 +44,7 @@
           </ul>
         </li>
         <li><a href="taskboard.php">Task Board</a></li>
-        <li><a href="review.html">Review</a></li>
+        <li><a href="review.php">Review</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="login.html"><span class="glyphicon glyphicon-user"></span> Sign Up / Sign In</a></li>
@@ -56,12 +56,15 @@
 <!-- Main Container -->
 
 <div class="container">
-<?php if(isset($_POST['epic_name'])){include 'epicCreate.php';}?>
-<?php if(isset($_GET['id'])){include 'epicRemove.php';}?>
+<?php 
+  include 'php/connectionStart.php';
+  if(isset($_POST['epic_name'])){include 'php/epicCreate.php';}
+  if(isset($_GET['remove'])){include 'php/epicRemove.php';}
+?>
 
 <!-- List of Epics in the backlog -->
 
-  <h2>Epic's Backlog</h2>
+  <h2>Epic Backlog</h2>
   <div class="table-responsive">        
     <table class="table table-">
       <thead>
@@ -74,7 +77,7 @@
         </tr>
       </thead>
       <tbody>
-        <?php include 'epicList.php' ?>
+        <?php include 'php/epicList.php' ?>
       </tbody>
     </table> 
   </div>

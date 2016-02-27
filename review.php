@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="css/style.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="js/Chart.js"></script>
 </head>
 <body>
 
@@ -25,7 +26,7 @@
     </div>
     <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="index.html">Home</a></li>
+        <li><a href="index.html">Home</a></li>
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Backlog<span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -42,7 +43,7 @@
           </ul>
         </li>
         <li><a href="taskboard.php">Task Board</a></li>
-        <li><a href="review.php">Review</a></li>
+        <li class="active"><a href="review.php">Review</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="login.html"><span class="glyphicon glyphicon-user"></span> Sign Up / Sign In</a></li>
@@ -50,25 +51,19 @@
     </div>
   </div>
 </nav>
-  
-<!-- Main Container -->
 
+<!-- Main Container -->
+  
 <div class="container">
-  <h1>Website under contstruction</h1>
-  <p>Bare in mind that the website is still being worked on and functionality may not be working as expected.</p>
-  <h1>Get Started Now</h1>
-  <h2>Start planning for your Scrum project by following the pages in the given order</h2>
-  <ul>
-    <li>Backlog - Complete </li>
-    <li>Epic Backlog - Complete </li>
-    <li>Story Backlog - Complete </li>
-    <li>Task Backlog - Complete </li>
-    <li>Planning</li>
-    <li>Release Planning - Complete </li>
-    <li>Sprint Planning</li>
-    <li>Task Board</li>
-    <li>Review</li>
-  </ul>
+  <div class="row">
+    <h2>Review</h2>
+  </div>
+  <div class="row">
+    <p>This section of the website provides graphs and statistics for analysing the sprints.</p>
+  </div>
+  <div class="row">
+    <h3>Task Completion</h3>
+  </div>
 </div>
 </body>
 </html>
