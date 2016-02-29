@@ -10,7 +10,7 @@
     $sql = 'INSERT INTO story_table (story_name, story_description, story_priority, story_estimation, epic_table_id) VALUES ("'. $story_name .'", "'. $story_description .'", "'. $story_priority .'", '. $story_estimation .', '. $story_epic .')';
     if ($conn->query($sql) === TRUE) 
     {
-      echo '<div class="alert alert-success"><strong>Success!</strong> User Story has been successfully created!</div>';
+      echo '<div class="alert alert-success"><strong>Success!</strong> Story has been successfully created!</div>';
     } 
     else 
     {

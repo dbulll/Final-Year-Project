@@ -38,7 +38,7 @@
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Backlog<span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="epicBacklog.php">Epic Backlog</a></li>
-            <li><a href="storyBacklog.php">User Story Backlog</a></li>
+            <li><a href="storyBacklog.php">Story Backlog</a></li>
             <li><a href="taskBacklog.php">Task Backlog</a></li>
           </ul>
         </li>
@@ -63,6 +63,22 @@
   
 <div class="container">
   <div class="row">
+    <a class="btn btn-default" id="taskboardButton" href="taskboard.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Taskboard
+    </a>
+  </div>
+  <div class="row">
+    <button class="btn btn-primary pull-right" data-toggle="collapse" data-target="#help_div">Page Help</button>
+  </div>
+  <div class="row pageDesc collapse" id="help_div">
+    <h4>Page Help <span class="glyphicon glyphicon-exclamation-sign"></h4>
+    <p>This is the Review page. From here you can view graphs and statistics based on a Sprint's progress.</p>
+    <ul style="text-align: left;">
+      <li>Return to the Taskboard using the 'Taskboard' button</li>
+      <li>Select which Sprint you would like review using the dropdown selection above the table</li>
+      <li>Show/Hide this Page Help box using the 'Page Help' button</li>
+    </ul>
+  </div>
+  <div class="row">
     <h2>Review</h2>
   </div>
   <div class="row">
@@ -72,6 +88,34 @@
     include 'php/connectionStart.php';
     include 'php/sprint_selection.php';
   ?>
+  <div class="row">
+    <h3>Task Completion</h3>
+  </div>
+  <div class="row">
+    <canvas id="firstChart" width="400" height="400"></canvas>
+    <script type="text/javascript">
+    <?php $array = [1,2,3,4]; ?>
+      var ctx = document.getElementById("firstChart").getContext("2d");
+      var data = 
+      {
+        labels: ["UnPlanned", "To Do", "In Progress", "Done"],
+        datasets: [
+        {
+            label: "Task Numbers",
+            fillColor: "rgba(151,187,205,0.5)",
+            strokeColor: "rgba(151,187,205,0.8)",
+            highlightFill: "rgba(151,187,205,0.75)",
+            highlightStroke: "rgba(151,187,205,1)",
+            data: <?php echo json_encode($array); ?>
+        }
+                  ]
+      };
+      
+      var myNewChart = new Chart(ctx).Line(data);
+    </script>
+  </div>
+
+
   <div class="row">
     <h3>Task Completion</h3>
   </div>

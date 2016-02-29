@@ -32,7 +32,7 @@
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Backlog<span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="epicBacklog.php">Epic Backlog</a></li>
-            <li><a href="storyBacklog.php">User Story Backlog</a></li>
+            <li><a href="storyBacklog.php">Story Backlog</a></li>
             <li class="active"><a href="taskBacklog.php">Task Backlog</a></li>
           </ul>
         </li>
@@ -55,14 +55,35 @@
 
 <div class="container">
   <div class="row">
-    <a class="btn btn-info" id="storyBacklogButton" href="storyBacklog.php" style="margin-bottom:10px;"><span class="glyphicon glyphicon-arrow-left"></span> Story Backlog
-    </a>
+    <div class="col-lg-6">
+      <a class="btn btn-default" id="storyBacklogButton" href="storyBacklog.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Story Backlog
+      </a>
+    </div>
+    <div class="col-lg-6">
+      <a class="btn btn-default pull-right" id="releasePlanningButton" href="releasePlanning.php" style="margin-bottom: 10px;">Release Planning <span class="glyphicon glyphicon-arrow-right"></span>
+      </a>
+    </div>
   </div>
   <?php 
     include 'php/connectionStart.php';
     if(isset($_POST['task_name'])){include 'php/taskCreate.php';}
     if(isset($_GET['remove'])){include 'php/taskRemove.php';}
   ?>
+  <div class="row">
+    <button class="btn btn-primary pull-right" data-toggle="collapse" data-target="#help_div">Page Help</button>
+  </div>
+  <div class="row pageDesc collapse" id="help_div">
+    <h4>Page Help <span class="glyphicon glyphicon-exclamation-sign"></h4>
+    <p>This page of the backlog list's the current Tasks that are created in the project.</p>
+    <ul style="text-align: left;">
+      <li>Return to the Story Backlog using the 'Story Backlog' button</li>
+      <li>Move on to the Release Planning using the 'Release Planning' button</li>
+      <li>Create a new Task using the 'Create New Task' button</li>
+      <li>Remove an unwanted Task using the 'Remove' button</li>
+      <li>Show/Hide this Page Help box using the 'Page Help' button</li>
+    </ul>
+  </div>
+
   <div class="row">
     <h2>Task Backlog</h2>
   </div>

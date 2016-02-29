@@ -5,8 +5,8 @@
       <tr>
         <th>Task Name</th>
         <th>Task Description</th>
-        <th>User Story Owner</th>
-        <th>Estimation (Hrs)</th>
+        <th>Story Name</th>
+        <th>Time Estimation</th>
         <th>Time Spent</th>
         <th></th>
       </tr>
@@ -16,11 +16,11 @@
     <?php
       if(isset($_GET['story_id']))
       {
-        $sql = mysqli_query($conn, 'SELECT * FROM task_table WHERE story_table_id = '.$_GET['story_id']);
+        $sql = mysqli_query($conn, 'SELECT a.*, b.story_name FROM task_table a, story_table b WHERE a.story_table_id = b.id AND story_table_id = '.$_GET['story_id']);
       }
       else
       {
-        $sql = mysqli_query($conn, 'SELECT * FROM task_table');
+        $sql = mysqli_query($conn, 'SELECT a.*, b.story_name FROM task_table a, story_table b WHERE a.story_table_id = b.id');
       }
       while($row = mysqli_fetch_array($sql))          
       {
@@ -28,7 +28,7 @@
           <tr>
             <td><?php echo $row['task_name'];?></td>
             <td><?php echo $row['task_description'];?></td>
-            <td><?php echo $row['story_table_id'];?></td>
+            <td><?php echo $row['story_name'];?></td>
             <td><?php echo $row['task_estimation'];?></td>
             <td><?php echo $row['task_actual'];?></td>
             <td>

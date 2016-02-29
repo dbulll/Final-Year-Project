@@ -32,7 +32,7 @@
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Backlog<span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="epicBacklog.php">Epic Backlog</a></li>
-            <li class="active"><a href="storyBacklog.php">User Story Backlog</a></li>
+            <li class="active"><a href="storyBacklog.php">Story Backlog</a></li>
             <li><a href="taskBacklog.php">Task Backlog</a></li>
           </ul>
         </li>
@@ -56,25 +56,46 @@
 <!-- Main Container -->
 
 <div class="container">
+
   <div class="row">
-    <a class="btn btn-info" id="epicBacklogButton" href="epicBacklog.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Epic Backlog
-    </a>
+    <div class="col-lg-6">
+      <a class="btn btn-default" id="epicBacklogButton" href="epicBacklog.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Epic Backlog
+      </a>
+    </div>
+    <div class="col-lg-6">
+      <a class="btn btn-default pull-right" id="taskBacklogButton" href="taskBacklog.php" style="margin-bottom: 10px;">Task Backlog <span class="glyphicon glyphicon-arrow-right"></span>
+      </a>
+    </div>
   </div>
-
-<!-- Start a connectin and check for actions -->
-
+  <!-- Start a connectin and check for actions -->
   <?php 
     include 'php/connectionStart.php';
     if(isset($_POST['story_name'])){include 'php/storyCreate.php';}
     if(isset($_GET['remove'])){include 'php/storyRemove.php';}
   ?>
+  <div class="row">
+    <button class="btn btn-primary pull-right" data-toggle="collapse" data-target="#help_div">Page Help</button>
+  </div>
+  <div class="row pageDesc collapse collapse" id="help_div">
+    <h4>Page Help <span class="glyphicon glyphicon-exclamation-sign"></h4>
+    <p>This page of the backlog list's the current Stories that are created in the project.</p>
+    <ul style="text-align: left;">
+      <li>Return to the Epic Backlog using the 'Epic Backlog' button</li>
+      <li>Move on to the Task Backlog using the 'Task Backlog' button</li>
+      <li>Create a new Story using the 'Create New Story' button</li>
+      <li>Remove an unwanted Story using the 'Remove' button</li>
+      <li>Expand a specific Story to list all associated Tasks using the 'Tasks' button</li>
+      <li>Show/Hide this Page Help box using the 'Page Help' button</li>
+    </ul>
+  </div>
+
 
   <div class="row">
-    <h2>User Story Backlog</h2>
+    <h2>Story Backlog</h2>
   </div>
   <div class="row">
   <!-- Trigger the modal with a button -->
-      <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">Create New User Story <span class="glyphicon glyphicon-plus"></button>
+      <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">Create New Story <span class="glyphicon glyphicon-plus"></button>
   </div>
   <div class="row">
 <!-- Modal -->
@@ -84,10 +105,10 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h3 class="modal-title">Create New User Story </h3>
+            <h3 class="modal-title">Create New Story </h3>
           </div>
           <div class="modal-body">
-<!-- Form for creating new user stories -->
+<!-- Form for creating new stories -->
           <form action="storyBacklog.php<?php if(isset($_GET['epic_id'])){echo '?epic_id='. $_GET["epic_id"];}?>" class="form-horizontal" data-toggle="validator" id="storyCreationForm" method="post" novalidate="true" role="form">
             <div class="form-group">
               <label class="col-lg-3 control-label" for="story_name">Story Name:</label>
@@ -165,7 +186,7 @@
             <th>Description</th>
             <th>Priority</th>
             <th>Estimation (Hrs)</th>
-            <th>Epic ID</th>
+            <th>Epic Name</th>
             <th>Tasks (No.)</th>
             <th></th>
             <th></th>

@@ -32,7 +32,7 @@
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Backlog<span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li class="active"><a href="epicBacklog.php">Epic Backlog</a></li>
-            <li><a href="storyBacklog.php">User Story Backlog</a></li>
+            <li><a href="storyBacklog.php">Story Backlog</a></li>
             <li><a href="taskBacklog.php">Task Backlog</a></li>
           </ul>
         </li>
@@ -56,11 +56,29 @@
 <!-- Main Container -->
 
 <div class="container">
+  <div class="row">
+  <a class="btn btn-default pull-right" id="storyBacklogButton" href="storyBacklog.php" style="margin-bottom: 10px;">Story Backlog <span class="glyphicon glyphicon-arrow-right"></span>
+      </a>
+  </div>
   <?php 
     include 'php/connectionStart.php';
     if(isset($_POST['epic_name'])){include 'php/epicCreate.php';}
     if(isset($_GET['remove'])){include 'php/epicRemove.php';}
   ?>
+  <div class="row">
+    <button class="btn btn-primary pull-right" data-toggle="collapse" data-target="#help_div">Page Help</button>
+  </div>
+  <div class="row pageDesc collapse collapse" id="help_div">
+    <h4>Page Help <span class="glyphicon glyphicon-exclamation-sign"></h4>
+    <p>This page of the backlog list's the current Epic's that are created in the project.</p>
+    <ul style="text-align: left;">
+      <li>Move on to the Story Backlog using the 'Story Backlog' button</li>
+      <li>Create a new Epic using the 'Create New Epic' button</li>
+      <li>Remove an unwanted Epic using the 'Remove' button</li>
+      <li>Expand a specific Epic to list all associated User Stories using the 'Stories' button</li>
+      <li>Show/Hide this Page Help box using the 'Page Help' button</li>
+    </ul>
+  </div>
   <div class="row">
     <h2>Epic Backlog</h2>
   </div>

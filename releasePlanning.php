@@ -32,7 +32,7 @@
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Backlog<span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="epicBacklog.php">Epic Backlog</a></li>
-            <li><a href="storyBacklog.php">User Story Backlog</a></li>
+            <li><a href="storyBacklog.php">Story Backlog</a></li>
             <li><a href="taskBacklog.php">Task Backlog</a></li>
           </ul>
         </li>
@@ -56,12 +56,36 @@
 <!-- Main Container -->
 
 <div class="container">
-
-<?php
-  include 'php/connectionStart.php'; 
-  if(isset($_POST['release_name'])){include 'php/releaseCreate.php';}
-  if(isset($_GET['remove'])){include 'php/releaseRemove.php';}
-?>
+  <div class="row">
+    <div class="col-lg-6">
+      <a class="btn btn-default" id="taskBacklogButton" href="taskBacklog.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Task Backlog
+      </a>
+    </div>
+    <div class="col-lg-6">
+      <a class="btn btn-default pull-right" id="sprintPlanningButton" href="sprintPlanning.php" style="margin-bottom: 10px;">Sprint Planning <span class="glyphicon glyphicon-arrow-right"></span>
+      </a>
+    </div>
+  </div>
+  <?php
+    include 'php/connectionStart.php'; 
+    if(isset($_POST['release_name'])){include 'php/releaseCreate.php';}
+    if(isset($_GET['remove'])){include 'php/releaseRemove.php';}
+  ?>
+  <div class="row">
+    <button class="btn btn-primary pull-right" data-toggle="collapse" data-target="#help_div">Page Help</button>
+  </div>
+  <div class="row pageDesc collapse" id="help_div">
+    <h4>Page Help <span class="glyphicon glyphicon-exclamation-sign"></h4>
+    <p>This page of the planning lists the current Releases that are created in the project.</p>
+    <ul style="text-align: left;">
+      <li>Return to the Task Backlog using the 'Task Backlog' button</li>
+      <li>Move on to the Sprint Planning using the 'Sprint Planning' button</li>
+      <li>Create a new Release using the 'Create New Release' button</li>
+      <li>Remove an unwanted Release using the 'Remove' button</li>
+      <li>Expand a specific Release to start planning User Stories into associated Sprints using the 'Sprints' button</li>
+      <li>Show/Hide this Page Help box using the 'Page Help' button</li>
+    </ul>
+  </div>
 <!-- List of Releases -->
   <div class="row">
     <h2>Release Planning</h2>
@@ -113,7 +137,7 @@
               </div>
             </div>
             <div class="form-group">
-              <div class="col-lg-offset-9 col-lg-3">
+              <div class="col-lg-offset-8 col-lg-3">
                 <button class="btn btn-success" type="submit" id="submit_button">Create Release <span class="glyphicon glyphicon-plus"></button>
               </div>
             </div>

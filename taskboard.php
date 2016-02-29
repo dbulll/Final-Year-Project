@@ -82,7 +82,7 @@
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Backlog<span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="epicBacklog.php">Epic Backlog</a></li>
-            <li><a href="storyBacklog.php">User Story Backlog</a></li>
+            <li><a href="storyBacklog.php">Story Backlog</a></li>
             <li><a href="taskBacklog.php">Task Backlog</a></li>
           </ul>
         </li>
@@ -106,11 +106,37 @@
 <!-- Main Container -->
   
 <div class="container">
+  <div class="row">
+    <div class="col-lg-6">
+      <a class="btn btn-default" id="sprintPlanningButton" href="sprintPlanning.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Sprint Planning
+      </a>
+    </div>
+    <div class="col-lg-6">
+      <a class="btn btn-default pull-right" id="reviewButton" href="review.php" style="margin-bottom: 10px;">Review <span class="glyphicon glyphicon-arrow-right"></span>
+      </a>
+    </div>
+  </div>
   <?php
     include 'php/connectionStart.php';
     if(isset($_GET['updateTask'])){include 'php/taskUpdate.php';}
     if(isset($_GET['update'])){include 'php/taskboardUpdate.php';}
   ?>
+  <div class="row">
+    <button class="btn btn-primary pull-right" data-toggle="collapse" data-target="#help_div">Page Help</button>
+  </div>
+  <div class="row pageDesc collapse" id="help_div">
+    <h4>Page Help <span class="glyphicon glyphicon-exclamation-sign"></h4>
+    <p>This is the Taskboard. Select a Sprint to see a list of all the Tasks from their associated planned Story. Move a Task into it's current state and update hours completed on each.</p>
+    <ul style="text-align: left;">
+      <li>Return to the Sprint Planning page using the 'Sprint Planning' button</li>
+      <li>Move on to the Review using the 'Review' button</li>
+      <li>Select which Sprint's Taskboard you would like to view using the dropdown selection above the table</li>
+      <li>Drag & Drop the Task elements into different columns of the table</li>
+      <li>Save the changes made to the Tasks state using the 'Save Changes' button</li>
+      <li>Update the hours spent on a given task using the 'Add Hours' button on each element</li>
+      <li>Show/Hide this Page Help box using the 'Page Help' button</li>
+    </ul>
+  </div>
   <div class="row">
     <h2>Task Board</h2>
   </div>

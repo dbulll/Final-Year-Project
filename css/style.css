@@ -1,5 +1,6 @@
 body { 
 	padding-top: 70px; 
+	font-family: Tahoma, Geneva, sans-serif;
 }
 
 /* Navigation appearance CSS */
@@ -21,6 +22,8 @@ body {
 	background-color: black;
 }
 
+/* End of Navigation CSS */
+
 .sPlanStory, .sPlanTask {
 	width: 250px;
 	height: auto;
@@ -37,7 +40,21 @@ body {
 #taskStateTd{
 	width: 25%;
 }
-/* End of Navigation CSS */
+
+.pageDesc{
+	border-color: #880044; 
+	border-radius: 20px;
+	border-style: solid;
+	border-width: 2px;
+	margin-left: 20%;
+	margin-right: 20%;
+	padding: 2%;
+	text-align: center;
+}
+
+.pageDesc>h4{
+	color: #880044;
+}
 
 /* CSS for Backlog */
 th,td {
