@@ -1,7 +1,7 @@
 <div class="row">
 	<!-- PHP Code - 1.Insert new Task into the database -->
 	<?php
-	  $sql = 'UPDATE task_table SET task_actual = '. $_POST["task_hours"] .' WHERE id = '. $_GET['task_id'];
+	  $sql = 'UPDATE task_table SET task_actual = '. $_POST["task_hours"] .' WHERE id = '. $_GET['updateTask'];
 	  if ($conn->query($sql) === TRUE) 
 	  {
 	   echo '<div class="alert alert-success"><strong>Success!</strong> Task has been successfully updated!</div>';

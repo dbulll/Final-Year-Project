@@ -63,8 +63,66 @@
   if(isset($_GET['remove'])){include 'php/releaseRemove.php';}
 ?>
 <!-- List of Releases -->
+  <div class="row">
+    <h2>Release Planning</h2>
+  </div>
+  <div class="row">
+    <!-- Trigger the modal with a button -->
+    <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">Create New Release <span class="glyphicon glyphicon-plus"></button>
+  </div>
+  <div class="row">
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
 
-  <h2>Release Planning</h2>
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h3 class="modal-title">Create New Release</h3>
+          </div>
+          <div class="modal-body">
+          <form action="releasePlanning.php" class="form-horizontal" data-toggle="validator" id="releaseCreationForm" method="post" novalidate="true" role="form">
+            <div class="form-group">
+              <label class="col-lg-3 control-label" for="release_name">Release Name:</label>
+              <div class="col-lg-9 has-feedback">
+                  <input class="form-control" name="release_name" maxlength="30" pattern="^[A-z0-9\s]{1,}$" placeholder="Enter Release Name" type="text" required/>
+                  <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label" for="release_description" >Release Description:</label>
+              <div class="col-lg-9 has-feedback">
+                  <textarea type="text" class="form-control" name="release_description" maxlength="1000" placeholder="Enter Release Description" rows="3" required></textarea>
+                  <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-4">
+                <label class="control-label" for="release_start_date">Release Start Date</label>
+                <input type="date" class="form-control" name="release_start_date" required>
+              </div>
+              <div class="col-lg-4">
+                <label class="control-label" for="release_end_date">Release End Date</label>
+                <input type="date" class="form-control" name="release_end_date" required>
+              </div>
+              <div class="col-lg-4 form-group has-feedback">
+                <label class="control-label" for="release_sprint_length">Sprint Length (days.)</label>
+                <input type="text" class="form-control" name="release_sprint_length" pattern="^[0-9]{1,2}$" maxlength="2" required>
+                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-lg-offset-9 col-lg-3">
+                <button class="btn btn-success" type="submit" id="submit_button">Create Release <span class="glyphicon glyphicon-plus"></button>
+              </div>
+            </div>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="table-responsive">        
     <table class="table table-striped">
       <thead>
@@ -84,43 +142,5 @@
     </table> 
   </div>
 </div>
-
-<div class="container">
-
-<!-- Form for creating new Releases -->
-
-  <h2> Create New release </h2>
-  <form class="form-horizontal col-lg-8 col-lg-offset-2" id="releaseCreationForm" data-toggle="validator" role="form" novalidate="true" action="releasePlanning.php" method="post">
-    <div class="row form-group has-feedback">
-      <label class="control-label" for="release_name">Release Name:</label>
-      <input type="text" class="form-control" name="release_name" pattern="^[A-z0-9\s]{1,}$" maxlength="30" placeholder="Enter Release Name" required>
-      <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
-    </div>
-    <div class="row form-group has-feedback">
-      <label class="control-label" for="release_description">Release Description:</label>
-      <textarea type="text" class="form-control" name="release_description" maxlength="1000" placeholder="Enter Release Description" rows="3" required></textarea>
-      <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
-    </div>
-    <div class="row">
-      <div class="col-lg-4">
-        <label class="control-label" for="release_start_date">Release Start Date</label>
-        <input type="date" class="form-control" name="release_start_date" required>
-      </div>
-      <div class="col-lg-4">
-        <label class="control-label" for="release_end_date">Release End Date</label>
-        <input type="date" class="form-control" name="release_end_date" required>
-      </div>
-      <div class="col-lg-4 form-group has-feedback">
-        <label class="control-label" for="release_sprint_length">Sprint Length (days.)</label>
-        <input type="text" class="form-control" name="release_sprint_length" pattern="^[0-9]{1,2}$" maxlength="2" required>
-        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
-      </div>
-    </div>
-    <div class="row form-group has-feedback">
-      <button type="submit" class="btn btn-primary pull-right" id="submit_button">Create Release <span class="glyphicon glyphicon-plus"></button>
-    </div>
-  </form>
-</div>
-
 </body>
 </html>

@@ -106,59 +106,15 @@
 <!-- Main Container -->
   
 <div class="container">
+  <?php
+    include 'php/connectionStart.php';
+    if(isset($_GET['updateTask'])){include 'php/taskUpdate.php';}
+    if(isset($_GET['update'])){include 'php/taskboardUpdate.php';}
+  ?>
   <div class="row">
-    <?php
-      $conn = new mysqli('localhost', 'root', '', 'scrum_web_app_db');
-      if($conn->connect_errno > 0)
-      {
-        die('Unable to connect to database [' . $conn->connect_error . ']');
-      }
-      if(isset($_GET['update']))
-      {
-        $taskNumber = 0;
-        $successUpdate = 0;
-        foreach ($_POST as $key => $value)
-        { 
-          $taskNumber= $taskNumber + 1;   
-          $updateStateSql = 'UPDATE task_table SET task_state = '. $value .' WHERE id = '. $key; 
-          if ($conn->query($updateStateSql) === TRUE) 
-          {
-            $successUpdate = $successUpdate + 1;
-          }
-        }
-        if($taskNumber == $successUpdate)
-        {
-          echo '<div class="alert alert-success"><strong>Success!</strong> Story states have been successfully updated</div>';
-        } 
-        else 
-        {
-          echo '<div class="alert alert-failure"><strong>There was an Error updating some of the story states!</strong> ' . $updateStateSql . '<br>' . $conn->error . '</div>';
-        }
-      }
-    ?>
     <h2>Task Board</h2>
   </div>
-  <div class="row">
-    <p>Select the sprint for related taskboard</p>
-    <select class="col-lg-4" id="sprint_list" onchange="sprintChange(event)">
-    <option value=0></option>
-    <?php
-      $sql = mysqli_query($conn, 'SELECT id, sprint_name, release_table_id FROM sprint_table');
-      while($row = mysqli_fetch_array($sql))          
-      {
-        echo '<option value='. $row['id'].' ';
-        if(isset($_GET['sprint_id']))
-        {
-          if($_GET['sprint_id'] == $row['id'])
-          {
-            echo 'selected="selected"';
-          }
-        }
-        echo '>Release '. $row['release_table_id'].'. '.$row['sprint_name'].'</option>';
-      }
-    ?>
-    </select>
-  </div>
+  <?php include 'php/sprint_selection.php' ?>
   <div class="row">
     <div class="col-lg-8">
       <h3>
@@ -229,25 +185,165 @@
                 echo '<td value=0 class="droptarget" id="taskStateTd" ondrop="drop(event)" ondragover="allowDrop(event)">';
                 while($rowUnplanned = mysqli_fetch_array($sqlUnplanned))
                 {
-                  echo '<div class="sPlanTask" id="'. $rowUnplanned['id'] .'" draggable="true" ondragstart="drag(event)"><strong>'. $rowUnplanned['task_name'] .'</strong><br>Estimation: '. $rowUnplanned['task_estimation'] .' hrs<br>Hours Spent: '. $rowUnplanned['task_actual'] .' hrs<br><a class="btn btn-info" id="go_to_task" href="taskBacklog.php?task_id='. $rowUnplanned['id'] .'" style="margin: 5px;">Go To <span class="glyphicon glyphicon-arrow-right"></a></div>';   
+                  echo '<div class="sPlanTask" id="'. $rowUnplanned['id'] .'" draggable="true" ondragstart="drag(event)">';
+                  echo '<strong>'. $rowUnplanned['task_name'] .'</strong><br>';
+                  echo 'Estimation: '. $rowUnplanned['task_estimation'] .' hrs<br>';
+                  echo 'Hours Spent: '. $rowUnplanned['task_actual'] .' hrs<br>';
+                  echo '<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal'.$rowUnplanned['id'].'" id="tb_modal_button" style="margin:5px;">Add Hours <span class="glyphicon glyphicon-plus"></button><br>';
+                  echo '<div class="row">
+                        <!-- Modal -->
+                          <div class="modal fade" id="myModal'.$rowUnplanned['id'].'"  role="dialog">
+                            <div class="modal-dialog modal-sm">
+                        <!-- Modal content-->
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                  <h4 class="modal-title">Update Hours </h4>
+                                </div>
+                                <div class="modal-body">
+                                <form action="taskboard.php?sprint_id='. $_GET['sprint_id'] .'&updateTask='. $rowUnplanned['id'] .'" class="form-horizontal" data-toggle="validator" id="taskUpdateHours" method="post" novalidate="true" role="form">
+                                <div class="form-group">
+                                  <label class="col-lg-5 control-label" for="task_hours">Hours Spent:</label>
+                                  <div class="col-lg-6 has-feedback">
+                                      <input class="form-control" name="task_hours" maxlength="2" pattern="^[0-9]{1,2}$" type="text" required/>
+                                      <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <div class="col-lg-offset-5 col-lg-7">
+                                    <button class="btn btn-success" id="submit_button" type="submit" >Update <span class="glyphicon glyphicon-plus"></button>
+                                  </div>
+                                </div>
+                                </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>';
                 }
                 echo '</td>';
                 echo '<td value=1 class="droptarget" id="taskStateTd" ondrop="drop(event)" ondragover="allowDrop(event)">';
                 while($rowTodo = mysqli_fetch_array($sqlTodo))
                 {
-                  echo '<div class="sPlanTask" id="'. $rowTodo['id'] .'" draggable="true" ondragstart="drag(event)"><strong>'. $rowTodo['task_name'] .'</strong><br>Estimation: '. $rowTodo['task_estimation'] .' hrs<br>Hours Spent: '. $rowTodo['task_actual'] .' hrs<br><a class="btn btn-info" id="go_to_task" href="taskBacklog.php?task_id='. $rowTodo['id'] .'" style="margin: 5px;">Go To <span class="glyphicon glyphicon-arrow-right"></a></div>';  
+                  echo '<div class="sPlanTask" id="'. $rowTodo['id'] .'" draggable="true" ondragstart="drag(event)">';
+                  echo '<strong>'. $rowTodo['task_name'] .'</strong><br>';
+                  echo 'Estimation: '. $rowTodo['task_estimation'] .' hrs<br>';
+                  echo 'Hours Spent: '. $rowTodo['task_actual'] .' hrs<br>';
+                  echo '<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal'.$rowTodo['id'].'" id="tb_modal_button" style="margin:5px;">Add Hours <span class="glyphicon glyphicon-plus"></button><br>';
+                  echo '<div class="row">
+                        <!-- Modal -->
+                          <div class="modal fade" id="myModal'.$rowTodo['id'].'"  role="dialog">
+                            <div class="modal-dialog modal-sm">
+                        <!-- Modal content-->
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                  <h4 class="modal-title">Update Hours </h4>
+                                </div>
+                                <div class="modal-body">
+                                <form action="taskboard.php?sprint_id='. $_GET['sprint_id'] .'&updateTask='. $rowTodo['id'] .'" class="form-horizontal" data-toggle="validator" id="taskUpdateHours" method="post" novalidate="true" role="form">
+                                <div class="form-group">
+                                  <label class="col-lg-5 control-label" for="task_hours">Hours Spent:</label>
+                                  <div class="col-lg-6 has-feedback">
+                                      <input class="form-control" name="task_hours" maxlength="2" pattern="^[0-9]{1,2}$" type="text" required/>
+                                      <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <div class="col-lg-offset-5 col-lg-7">
+                                    <button class="btn btn-success" id="submit_button" type="submit" >Update <span class="glyphicon glyphicon-plus"></button>
+                                  </div>
+                                </div>
+                                </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>';  
                 }
                 echo '</td>';
                 echo '<td value=2 class="droptarget" id="taskStateTd" ondrop="drop(event)" ondragover="allowDrop(event)">';
                 while ($rowInprogress = mysqli_fetch_array($sqlInprogress))
                 { 
-                  echo '<div class="sPlanTask" id="'. $rowInprogress['id'] .'" draggable="true" ondragstart="drag(event)"><strong>'. $rowInprogress['task_name'] .'</strong><br>Estimation: '. $rowInprogress['task_estimation'] .' hrs<br>Hours Spent: '. $rowInprogress['task_actual'] .' hrs<br><a class="btn btn-info" id="go_to_task" href="taskBacklog.php?task_id='. $rowInprogress['id'] .'" style="margin: 5px;">Go To <span class="glyphicon glyphicon-arrow-right"></a></div>';
+                  echo '<div class="sPlanTask" id="'. $rowInprogress['id'] .'" draggable="true" ondragstart="drag(event)">';
+                  echo '<strong>'. $rowInprogress['task_name'] .'</strong><br>';
+                  echo 'Estimation: '. $rowInprogress['task_estimation'] .' hrs<br>';
+                  echo 'Hours Spent: '. $rowInprogress['task_actual'] .' hrs<br>';
+                  echo '<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal'.$rowInprogress['id'].'" id="tb_modal_button" style="margin:5px;">Add Hours <span class="glyphicon glyphicon-plus"></button><br>';
+                  echo '<div class="row">
+                        <!-- Modal -->
+                          <div class="modal fade" id="myModal'.$rowInprogress['id'].'"  role="dialog">
+                            <div class="modal-dialog modal-sm">
+                        <!-- Modal content-->
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                  <h4 class="modal-title">Update Hours </h4>
+                                </div>
+                                <div class="modal-body">
+                                <form action="taskboard.php?sprint_id='. $_GET['sprint_id'] .'&updateTask='. $rowInprogress['id'] .'" class="form-horizontal" data-toggle="validator" id="taskUpdateHours" method="post" novalidate="true" role="form">
+                                <div class="form-group">
+                                  <label class="col-lg-5 control-label" for="task_hours">Hours Spent:</label>
+                                  <div class="col-lg-6 has-feedback">
+                                      <input class="form-control" name="task_hours" maxlength="2" pattern="^[0-9]{1,2}$" type="text" required/>
+                                      <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <div class="col-lg-offset-5 col-lg-7">
+                                    <button class="btn btn-success" id="submit_button" type="submit" >Update <span class="glyphicon glyphicon-plus"></button>
+                                  </div>
+                                </div>
+                                </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>';
                 }
                 echo '</td>';
                 echo '<td value=3 class="droptarget" id="taskStateTd" ondrop="drop(event)" ondragover="allowDrop(event)">';
                 while ($rowDone = mysqli_fetch_array($sqlDone))
                 { 
-                  echo '<div class="sPlanTask" id="'. $rowDone['id'] .'" draggable="true" ondragstart="drag(event)"><strong>'. $rowDone['task_name'] .'</strong><br>Estimation: '. $rowDone['task_estimation'] .' hrs<br>Hours Spent: '. $rowDone['task_actual'] .' hrs<br><a class="btn btn-info" id="go_to_task" href="taskBacklog.php?task_id='. $rowDone['id'] .'" style="margin: 5px;">Go To <span class="glyphicon glyphicon-arrow-right"></a></div>';
+                  echo '<div class="sPlanTask" id="'. $rowDone['id'] .'" draggable="true" ondragstart="drag(event)">';
+                  echo '<strong>'. $rowDone['task_name'] .'</strong><br>';
+                  echo 'Estimation: '. $rowDone['task_estimation'] .' hrs<br>';
+                  echo 'Hours Spent: '. $rowDone['task_actual'] .' hrs<br>';
+                  echo '<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal'.$rowDone['id'].'" id="tb_modal_button" style="margin:5px;">Add Hours <span class="glyphicon glyphicon-plus"></button><br>';
+                  echo '<div class="row">
+                        <!-- Modal -->
+                          <div class="modal fade" id="myModal'.$rowDone['id'].'"  role="dialog">
+                            <div class="modal-dialog modal-sm">
+                        <!-- Modal content-->
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                  <h4 class="modal-title">Update Hours </h4>
+                                </div>
+                                <div class="modal-body">
+                                <form action="taskboard.php?sprint_id='. $_GET['sprint_id'] .'&updateTask='. $rowDone['id'] .'" class="form-horizontal" data-toggle="validator" id="taskUpdateHours" method="post" novalidate="true" role="form">
+                                <div class="form-group">
+                                  <label class="col-lg-5 control-label" for="task_hours">Hours Spent:</label>
+                                  <div class="col-lg-6 has-feedback">
+                                      <input class="form-control" name="task_hours" maxlength="2" pattern="^[0-9]{1,2}$" type="text" required/>
+                                      <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <div class="col-lg-offset-5 col-lg-7">
+                                    <button class="btn btn-success" id="submit_button" type="submit" >Update <span class="glyphicon glyphicon-plus"></button>
+                                  </div>
+                                </div>
+                                </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>';
                 }
                 echo '</td>';
               }

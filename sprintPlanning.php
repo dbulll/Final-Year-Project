@@ -108,36 +108,36 @@
 <!-- Main Container -->
 
 <div class="container">
+  <?php
+    $conn = new mysqli('localhost', 'root', '', 'scrum_web_app_db');
+    if($conn->connect_errno > 0)
+    {
+      die('Unable to connect to database [' . $conn->connect_error . ']');
+    }
+    if(isset($_GET['update']))
+    {
+      $totalDefined = 0;
+      $successUpdate = 0;
+      foreach ($_POST as $key => $value)
+      { 
+        $totalDefined = $totalDefined + 1;   
+        $updateSprintSql = 'UPDATE story_table SET sprint_table_id = '. $value .' WHERE id = '. $key; 
+        if ($conn->query($updateSprintSql) === TRUE) 
+        {
+          $successUpdate = $successUpdate + 1;
+        }
+      }
+      if($totalDefined == $successUpdate)
+      {
+        echo '<div class="alert alert-success"><strong>Success!</strong> Sprints have been successfully updated</div>';
+      } 
+      else 
+      {
+        echo '<div class="alert alert-failure"><strong>There was an Error updating some of the stories!</strong> ' . $updateSprintSql . '<br>' . $conn->error . '</div>';
+      }
+    }
+  ?>
   <div class="row">
-    <?php
-      $conn = new mysqli('localhost', 'root', '', 'scrum_web_app_db');
-      if($conn->connect_errno > 0)
-      {
-        die('Unable to connect to database [' . $conn->connect_error . ']');
-      }
-      if(isset($_GET['update']))
-      {
-        $totalDefined = 0;
-        $successUpdate = 0;
-        foreach ($_POST as $key => $value)
-        { 
-          $totalDefined = $totalDefined + 1;   
-          $updateSprintSql = 'UPDATE story_table SET sprint_table_id = '. $value .' WHERE id = '. $key; 
-          if ($conn->query($updateSprintSql) === TRUE) 
-          {
-            $successUpdate = $successUpdate + 1;
-          }
-        }
-        if($totalDefined == $successUpdate)
-        {
-          echo '<div class="alert alert-success"><strong>Success!</strong> Sprints have been successfully updated</div>';
-        } 
-        else 
-        {
-          echo '<div class="alert alert-failure"><strong>There was an Error updating some of the stories!</strong> ' . $updateSprintSql . '<br>' . $conn->error . '</div>';
-        }
-      }
-    ?>
     <h2>Sprint Planning</h2>
   </div>
   <div class="row">

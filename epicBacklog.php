@@ -56,15 +56,59 @@
 <!-- Main Container -->
 
 <div class="container">
-<?php 
-  include 'php/connectionStart.php';
-  if(isset($_POST['epic_name'])){include 'php/epicCreate.php';}
-  if(isset($_GET['remove'])){include 'php/epicRemove.php';}
-?>
+  <?php 
+    include 'php/connectionStart.php';
+    if(isset($_POST['epic_name'])){include 'php/epicCreate.php';}
+    if(isset($_GET['remove'])){include 'php/epicRemove.php';}
+  ?>
+  <div class="row">
+    <h2>Epic Backlog</h2>
+  </div>
+  <div class="row">
+    <!-- Trigger the modal with a button -->
+    <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">Create New Epic <span class="glyphicon glyphicon-plus"></button>
+  </div>
+  <div class="row">
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h3 class="modal-title">Create New Epic</h3>
+          </div>
+          <div class="modal-body">
+          <form action="epicBacklog.php" class="form-horizontal" data-toggle="validator" id="epicCreationForm" method="post" novalidate="true" role="form">
+            <div class="form-group">
+              <label class="col-lg-3 control-label" for="epic_name">Epic Name:</label>
+              <div class="col-lg-9 has-feedback">
+                  <input class="form-control" name="epic_name" maxlength="30" pattern="^[A-z0-9\s]{1,}$" placeholder="Enter Epic Name" type="text" required/>
+                  <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label" for="epic_description" >Epic Description:</label>
+              <div class="col-lg-9 has-feedback">
+                  <textarea type="text" class="form-control" name="epic_description" maxlength="1000" placeholder="Enter Epic Description" rows="3" required></textarea>
+                  <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-lg-offset-9 col-lg-3">
+                <button class="btn btn-success" type="submit" id="submit_button">Create Epic <span class="glyphicon glyphicon-plus"></button>
+              </div>
+            </div>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <!-- List of Epics in the backlog -->
-
-  <h2>Epic Backlog</h2>
+  <div class="row">
   <div class="table-responsive">        
     <table class="table table-">
       <thead>
@@ -81,25 +125,7 @@
       </tbody>
     </table> 
   </div>
-
-<!-- Form for creating new epics-->
-
-  <h2> Create New Epic </h2>
-  <form class="form-horizontal col-lg-8 col-lg-offset-2" id="epicCreationForm" data-toggle="validator" role="form" novalidate="true" action="epicBacklog.php" method="post">
-    <div class="row form-group has-feedback">
-      <label class="control-label" for="epic_name">Epic Name:</label>
-      <input type="text" class="form-control" name="epic_name" pattern="^[A-z0-9\s]{1,}$" maxlength="30" placeholder="Enter Epic Name" required>
-      <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
-    </div>
-    <div class="row form-group has-feedback">
-      <label class="control-label" for="epic_description">Epic Description:</label>
-      <textarea type="text" class="form-control" name="epic_description" maxlength="1000" placeholder="Enter Epic Description" rows="3" required></textarea>
-      <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
-    </div>
-    <div class="row form-group pull-right">
-      <button type="submit" class="btn btn-primary" id="submit_button">Create Epic <span class="glyphicon glyphicon-plus"></button>
-    </div>
-  </form>
+  </div>
 </div>  
 </body>
 </html>

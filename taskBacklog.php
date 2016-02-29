@@ -54,35 +54,90 @@
 </nav>
 
 <div class="container">
-  <?php
+  <div class="row">
+    <a class="btn btn-info" id="storyBacklogButton" href="storyBacklog.php" style="margin-bottom:10px;"><span class="glyphicon glyphicon-arrow-left"></span> Story Backlog
+    </a>
+  </div>
+  <?php 
     include 'php/connectionStart.php';
-    if(isset($_POST['task_name']))
-      {
-        include 'php/taskCreate.php';
-        include 'php/taskList.php';
-        include 'php/taskForm.php';
-      }
-    else if(isset($_POST['task_hours']))
-      {
-        include 'php/taskUpdate.php';
-        include 'php/taskEdit.php';
-      }
-    else if(isset($_GET['remove']))
-      {
-        include 'php/taskRemove.php';
-        include 'php/taskList.php';
-        include 'php/taskForm.php';
-      }
-    else if(isset($_GET['task_id']))
-      {
-        include 'php/taskEdit.php';
-      }
-    else
-      {
-        include 'php/taskList.php';
-        include 'php/taskForm.php';
-      }
+    if(isset($_POST['task_name'])){include 'php/taskCreate.php';}
+    if(isset($_GET['remove'])){include 'php/taskRemove.php';}
   ?>
+  <div class="row">
+    <h2>Task Backlog</h2>
+  </div>
+  <div class="row">
+  <!-- Trigger the modal with a button -->
+      <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">Create New Task <span class="glyphicon glyphicon-plus"></button>
+  </div>
+  <div class="row">
+<!-- Modal -->
+    <div class="modal fade" id="myModal"  role="dialog">
+      <div class="modal-dialog modal-lg">
+<!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h3 class="modal-title">Create New Task </h3>
+          </div>
+          <div class="modal-body">
+<!-- Form for creating new user stories -->
+          <form action="taskBacklog.php<?php if(isset($_GET['story_id'])){echo '?story_id='. $_GET["story_id"];}?>" class="form-horizontal" data-toggle="validator" id="taskCreationForm" method="post" novalidate="true" role="form">
+            <div class="form-group">
+              <label class="col-lg-3 control-label" for="task_name">Task Name:</label>
+              <div class="col-lg-9 has-feedback">
+                  <input class="form-control" name="task_name" maxlength="30" pattern="^[A-z0-9\s]{1,}$" placeholder="Enter Task Name" type="text" required/>
+                  <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label" for="task_description" >Task Description:</label>
+              <div class="col-lg-9 has-feedback">
+                  <textarea type="text" class="form-control" name="task_description" maxlength="1000" placeholder="Enter Task Description" rows="3" required></textarea>
+                  <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label" for="task_story" >Story:</label>
+              <div class="col-lg-5 has-feedback">
+                <select class="form-control" name="task_story">
+                  <?php
+                    $sql = mysqli_query($conn, 'SELECT * FROM story_table');
+                    while($row = mysqli_fetch_array($sql))          
+                    {
+                      echo '<option value='. $row['id'].' ';
+                      if(isset($_GET['story_id']))
+                      {
+                        if($_GET['story_id'] == $row['id'])
+                        {
+                          echo 'selected="selected"';
+                        }
+                      }
+                      echo '>'. $row['story_name'].'</option>';
+                    }
+                  ?>
+                </select>
+              </div>
+            </div>
+          <div class="form-group">
+            <label class="control-label col-lg-3" for="task_estimation">Task Estimation (hrs.):</label>
+            <div class="col-lg-4 has-feedback">
+              <input type="text" class="form-control" name="task_estimation" pattern="^[0-9]{1,2}$" maxlength="2" required>
+              <span class="glyphicon form-control-feedback" aria-hidden="true" required></span>
+            </div>
+          </div>
+          <div class="form-group has-feedback">
+            <div class="col-lg-offset-9 col-lg-3">
+              <button class="btn btn-success" id="submit_button" type="submit" >Create Task <span class="glyphicon glyphicon-plus"></button>
+            </div>
+          </div>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php include 'php/taskList.php'; ?>
 </div>
 </body>
 </html>
