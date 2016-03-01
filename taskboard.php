@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/jquery-2.2.0.js"></script>
+  <script src="js/validator.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script type="text/javascript">
@@ -118,7 +120,11 @@
   </div>
   <?php
     include 'php/connectionStart.php';
-    if(isset($_GET['updateTask'])){include 'php/taskUpdate.php';}
+    if(isset($_GET['updateTask']))
+      {
+        include 'php/taskUpdate.php';
+        include 'php/taskChange.php';
+      }
     if(isset($_GET['update'])){include 'php/taskboardUpdate.php';}
   ?>
   <div class="row">
@@ -219,7 +225,7 @@
                   echo '<div class="row">
                         <!-- Modal -->
                           <div class="modal fade" id="myModal'.$rowUnplanned['id'].'"  role="dialog">
-                            <div class="modal-dialog modal-sm">
+                            <div class="modal-dialog modal-md">
                         <!-- Modal content-->
                               <div class="modal-content">
                                 <div class="modal-header">
@@ -229,16 +235,28 @@
                                 <div class="modal-body">
                                 <form action="taskboard.php?sprint_id='. $_GET['sprint_id'] .'&updateTask='. $rowUnplanned['id'] .'" class="form-horizontal" data-toggle="validator" id="taskUpdateHours" method="post" novalidate="true" role="form">
                                 <div class="form-group">
-                                  <label class="col-lg-5 control-label" for="task_hours">Hours Spent:</label>
-                                  <div class="col-lg-6 has-feedback">
+                                  <label class="col-lg-4 control-label" for="task_hours">Hours Spent:</label>
+                                  <div class="col-lg-4 has-feedback">
                                       <input class="form-control" name="task_hours" maxlength="2" pattern="^[0-9]{1,2}$" type="text" required/>
                                       <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
                                   </div>
                                 </div>
                                 <div class="form-group">
-                                  <div class="col-lg-offset-5 col-lg-7">
-                                    <button class="btn btn-success" id="submit_button" type="submit" >Update <span class="glyphicon glyphicon-plus"></button>
+                                  <label class="col-lg-4 control-label" for="task_hours_remaining">Task Hours Remaining:</label>
+                                  <div class="col-lg-4 has-feedback">
+                                      <input class="form-control" name="task_hours_remaining" maxlength="2" pattern="^[0-9]{1,2}$" type="text" required/>
+                                      <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
                                   </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="col-lg-4 control-label" for="change_date">Date Of Change:</label>
+                                    <div class="col-lg-5 has-feedback">
+                                      <input type="date" class="form-control" name="change_date" required>
+                                      <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                  <button class="btn btn-success" id="submit_button" type="submit" >Update <span class="glyphicon glyphicon-plus"></button>
                                 </div>
                                 </form>
                                 </div>

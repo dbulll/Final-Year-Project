@@ -88,30 +88,91 @@
     include 'php/connectionStart.php';
     include 'php/sprint_selection.php';
   ?>
+  <?php 
+      if(isset($_GET['sprint_id']))
+      {
+        $storySql = mysqli_query($conn, 'SELECT sprint_start_date, sprint_end_date FROM sprint_table WHERE id = '. $_GET['sprint_id']);
+        $totalSprintEstimate = mysqli_query($conn, 'SELECT SUM( task_estimation ) AS sprint_total_estimate FROM task_table a, story_table b WHERE a.story_table_id = b.id AND sprint_table_id = '. $_GET['sprint_id']);
+        $sprintEstimate = mysqli_fetch_array($totalSprintEstimate);
+        $storyArray = mysqli_fetch_array($storySql);
+        $start_date = str_replace('-',',',$storyArray['sprint_start_date']);
+        $end_date =  str_replace('-',',',$storyArray['sprint_end_date']);
+
+        $begin = new DateTime($storyArray['sprint_start_date']);
+        $end = new DateTime($storyArray['sprint_end_date']);
+        $interval = DateInterval::createFromDateString('1 day');
+        $period = new DatePeriod($begin, $interval, $end);
+        $sprintEstimate2 = $sprintEstimate['sprint_total_estimate'];
+        $totalSpent = 0;
+        $dateArray = [];
+        $estimateArray = [];
+        $remainingArray = [];
+        foreach ( $period as $dt ){
+          
+          array_push($dateArray, $dt->format( "Y-m-d" ));
+          array_push($estimateArray, $sprintEstimate2);
+          $sprintEstimate2 = $sprintEstimate2 - 5;
+          $tempRemaining = 0;
+          $sqlA = mysqli_query($conn, 'SELECT * FROM story_table WHERE sprint_table_id = '. $_GET['sprint_id']);
+          while($rowA = mysqli_fetch_array($sqlA))
+          {
+            $sqlB = mysqli_query($conn, 'SELECT * FROM task_table WHERE story_table_id = '. $rowA['id']);
+            while($rowB = mysqli_fetch_array($sqlB))
+            {
+              $sqlC = mysqli_query($conn, 'SELECT * FROM change_table WHERE task_table_id = '. $rowB['id'] .' AND change_date < "'. $dt->format( "Y-m-d" ) .'" ORDER BY id DESC');
+              $sqlD = mysqli_fetch_array($sqlC);
+              if($sqlD == NULL)
+              {
+                $value = $rowB['task_estimation'];
+              }
+              else
+              {
+                $value = $sqlD['task_hours_remaining'];
+              }
+              $tempRemaining = $tempRemaining + $value;
+            }
+          }
+          array_push($remainingArray, $tempRemaining);
+        }
+      }
+    ?>
   <div class="row">
     <h3>Task Completion</h3>
   </div>
   <div class="row">
-    <canvas id="firstChart" width="400" height="400"></canvas>
+    <canvas id="firstChart" width="1000" height="500"></canvas>
     <script type="text/javascript">
-    <?php $array = [1,2,3,4]; ?>
-      var ctx = document.getElementById("firstChart").getContext("2d");
-      var data = 
-      {
-        labels: ["UnPlanned", "To Do", "In Progress", "Done"],
-        datasets: [
-        {
-            label: "Task Numbers",
-            fillColor: "rgba(151,187,205,0.5)",
-            strokeColor: "rgba(151,187,205,0.8)",
-            highlightFill: "rgba(151,187,205,0.75)",
-            highlightStroke: "rgba(151,187,205,1)",
-            data: <?php echo json_encode($array); ?>
-        }
-                  ]
-      };
+      var start_date = new Date(<?php echo $start_date; ?>);
+      var end_date = new Date(<?php echo $end_date; ?>);
+      var ctx1 = document.getElementById("firstChart").getContext("2d");
+      var data1 = {
+                labels: <?php echo json_encode($dateArray); ?>,
+                datasets: [
+                    {
+                        label: "EstimationLine",
+                        fillColor: "rgba(220,220,220,0.2)",
+                        strokeColor: "rgba(220,220,220,1)",
+                        pointColor: "rgba(220,220,220,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)",
+                        data: <?php echo json_encode($estimateArray); ?>             
+                    },
+                    {
+                        label: "ActualLine",
+                        fillColor: "rgba(151,187,205,0.2)",
+                        strokeColor: "rgba(151,187,205,1)",
+                        pointColor: "rgba(151,187,205,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(151,187,205,1)",
+                        data: <?php echo json_encode($remainingArray); ?>
+                    }
+                ]
+            };
+
       
-      var myNewChart = new Chart(ctx).Line(data);
+      var myNewChart1 = new Chart(ctx1).Line(data1);
     </script>
   </div>
 

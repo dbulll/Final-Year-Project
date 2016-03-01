@@ -233,7 +233,13 @@
             $sqlTemp = mysqli_query($conn, 'SELECT * FROM story_table WHERE sprint_table_id IS NULL');
             while($rowTemp = mysqli_fetch_array($sqlTemp))
             {
-              echo '<div class="sPlanStory" id="'. $rowTemp['id'] .'" draggable="true" ondragstart="drag(event)"><strong>'. $rowTemp['story_name'] .'</strong><br>Estimation: '. $rowTemp['story_estimation'] .' hrs<br>Priority: '. $rowTemp['story_priority'] .'</div>';   
+              $story_estimation = mysqli_query($conn, 'SELECT SUM(task_estimation) AS story_estimation FROM task_table WHERE story_table_id = '.$rowTemp['id']);
+              $story_estimation_array = mysqli_fetch_array($story_estimation);
+              if($story_estimation_array['story_estimation'] == NULL)
+              {
+                $story_estimation_array['story_estimation'] = 0;
+              }
+              echo '<div class="sPlanStory" id="'. $rowTemp['id'] .'" draggable="true" ondragstart="drag(event)"><strong>'. $rowTemp['story_name'] .'</strong><br>Estimation: '. $story_estimation_array['story_estimation'] .' hrs<br>Priority: '. $rowTemp['story_priority'] .'</div>';   
             }
             echo '</td>';
             while ($row2 = mysqli_fetch_array($sql2))
@@ -242,7 +248,13 @@
               echo '<td value="'. $row2['id'] .'" class="droptarget" ondrop="drop(event)" ondragover="allowDrop(event)">'; 
               while($row3 = mysqli_fetch_array($sql3))
               {
-                echo '<div class="sPlanStory" id="'. $row3['id'] .'" draggable="true" ondragstart="drag(event)"><strong>'. $row3['story_name'] .'</strong><br>Estimation: '. $row3['story_estimation'] .' hrs<br>Priority: '. $row3['story_priority'] .'</div>';   
+                $story_estimation2 = mysqli_query($conn, 'SELECT SUM(task_estimation) AS story_estimation FROM task_table WHERE story_table_id = '.$row3['id']);
+                $story_estimation_array2 = mysqli_fetch_array($story_estimation2);
+                if($story_estimation_array2['story_estimation'] == NULL)
+                {
+                  $story_estimation_array2['story_estimation'] = 0;
+                }
+                echo '<div class="sPlanStory" id="'. $row3['id'] .'" draggable="true" ondragstart="drag(event)"><strong>'. $row3['story_name'] .'</strong><br>Estimation: '. $story_estimation_array2['story_estimation'] .' hrs<br>Priority: '. $row3['story_priority'] .'</div>';   
               }
             }
           }
