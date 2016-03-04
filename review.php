@@ -91,27 +91,31 @@
   <?php 
       if(isset($_GET['sprint_id']))
       {
-        $storySql = mysqli_query($conn, 'SELECT sprint_start_date, sprint_end_date FROM sprint_table WHERE id = '. $_GET['sprint_id']);
-        $totalSprintEstimate = mysqli_query($conn, 'SELECT SUM( task_estimation ) AS sprint_total_estimate FROM task_table a, story_table b WHERE a.story_table_id = b.id AND sprint_table_id = '. $_GET['sprint_id']);
+        $storySql = mysqli_query($conn, 'SELECT a.id, a.sprint_start_date, a.sprint_end_date, b.release_work_hours FROM sprint_table a, release_table b WHERE a.release_table_id = b.id AND a.id = '. $_GET['sprint_id']);
+        $totalSprintEstimate = mysqli_query($conn, 'SELECT SUM( task_hours_estimation ) AS sprint_total_estimate FROM task_table a, story_table b WHERE a.story_table_id = b.id AND sprint_table_id = '. $_GET['sprint_id']);
+
         $sprintEstimate = mysqli_fetch_array($totalSprintEstimate);
         $storyArray = mysqli_fetch_array($storySql);
         $start_date = str_replace('-',',',$storyArray['sprint_start_date']);
         $end_date =  str_replace('-',',',$storyArray['sprint_end_date']);
-
         $begin = new DateTime($storyArray['sprint_start_date']);
-        $end = new DateTime($storyArray['sprint_end_date']);
+        $end = (new DateTime($storyArray['sprint_end_date']))->modify('+1 day');
         $interval = DateInterval::createFromDateString('1 day');
         $period = new DatePeriod($begin, $interval, $end);
         $sprintEstimate2 = $sprintEstimate['sprint_total_estimate'];
+        $average_work_hours = $storyArray['release_work_hours'];
         $totalSpent = 0;
         $dateArray = [];
         $estimateArray = [];
         $remainingArray = [];
         foreach ( $period as $dt ){
-          
           array_push($dateArray, $dt->format( "Y-m-d" ));
           array_push($estimateArray, $sprintEstimate2);
-          $sprintEstimate2 = $sprintEstimate2 - 5;
+          $sprintEstimate2 = $sprintEstimate2 - $average_work_hours;
+          if($sprintEstimate2 < 0)
+          {
+            $sprintEstimate2 = 0;
+          }
           $tempRemaining = 0;
           $sqlA = mysqli_query($conn, 'SELECT * FROM story_table WHERE sprint_table_id = '. $_GET['sprint_id']);
           while($rowA = mysqli_fetch_array($sqlA))
@@ -119,11 +123,11 @@
             $sqlB = mysqli_query($conn, 'SELECT * FROM task_table WHERE story_table_id = '. $rowA['id']);
             while($rowB = mysqli_fetch_array($sqlB))
             {
-              $sqlC = mysqli_query($conn, 'SELECT * FROM change_table WHERE task_table_id = '. $rowB['id'] .' AND change_date < "'. $dt->format( "Y-m-d" ) .'" ORDER BY id DESC');
+              $sqlC = mysqli_query($conn, 'SELECT * FROM change_table WHERE task_table_id = '. $rowB['id'] .' AND change_date <= "'. $dt->format( "Y-m-d" ) .'" ORDER BY change_date DESC');
               $sqlD = mysqli_fetch_array($sqlC);
               if($sqlD == NULL)
               {
-                $value = $rowB['task_estimation'];
+                $value = $rowB['task_hours_estimation'];
               }
               else
               {
@@ -137,7 +141,7 @@
       }
     ?>
   <div class="row">
-    <h3>Task Completion</h3>
+    <h3>Sprint Burndown</h3>
   </div>
   <div class="row">
     <canvas id="firstChart" width="1000" height="500"></canvas>
@@ -150,7 +154,7 @@
                 datasets: [
                     {
                         label: "EstimationLine",
-                        fillColor: "rgba(220,220,220,0.2)",
+                        fillColor: "rgba(0,0,0,0)",
                         strokeColor: "rgba(220,220,220,1)",
                         pointColor: "rgba(220,220,220,1)",
                         pointStrokeColor: "#fff",
@@ -160,7 +164,7 @@
                     },
                     {
                         label: "ActualLine",
-                        fillColor: "rgba(151,187,205,0.2)",
+                        fillColor: "rgba(0,0,0,0)",
                         strokeColor: "rgba(151,187,205,1)",
                         pointColor: "rgba(151,187,205,1)",
                         pointStrokeColor: "#fff",
@@ -172,7 +176,7 @@
             };
 
       
-      var myNewChart1 = new Chart(ctx1).Line(data1);
+      var myNewChart1 = new Chart(ctx1).Line(data1,{bezierCurve: false});
     </script>
   </div>
 

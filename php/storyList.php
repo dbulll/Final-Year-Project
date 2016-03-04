@@ -11,7 +11,7 @@
   while($row = mysqli_fetch_array($sql))          
   {
     $sql2 = mysqli_query($conn, 'SELECT * FROM task_table WHERE story_table_id = ' .$row['id']);
-    $story_estimation = mysqli_query($conn, 'SELECT SUM(task_estimation) AS story_estimation FROM task_table WHERE story_table_id = '.$row['id']);
+    $story_estimation = mysqli_query($conn, 'SELECT SUM(task_hours_estimation) AS story_estimation FROM task_table WHERE story_table_id = '.$row['id']);
     $row2 = mysqli_fetch_array($story_estimation);
     ?>
       <tr>

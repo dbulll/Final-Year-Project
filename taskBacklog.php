@@ -10,6 +10,13 @@
   <script src="js/validator.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+  function storyChange(ev){
+      var selectE = document.getElementById("story_list");
+      var storyId = selectE.options[selectE.selectedIndex].value;
+      window.location.href = "taskBacklog.php?story_id=".concat(storyId);
+    }
+  </script>
 </head>
 <body>
 
@@ -88,6 +95,27 @@
     <h2>Task Backlog</h2>
   </div>
   <div class="row">
+    <p>Select Story:</p>
+    <select class="col-lg-4" id="story_list" onchange="storyChange(event)">
+      <option value=0></option>
+    <?php
+      $sql = mysqli_query($conn, 'SELECT id, story_name FROM story_table');
+      while($row = mysqli_fetch_array($sql))          
+      {
+        echo '<option value='. $row['id'].' ';
+        if(isset($_GET['story_id']))
+        {
+          if($_GET['story_id'] == $row['id'])
+          {
+            echo 'selected="selected"';
+          }
+        }
+        echo '>'. $row['story_name'].'</option>';
+      }
+    ?>
+    </select>
+  </div>
+  <div class="row">
   <!-- Trigger the modal with a button -->
       <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">Create New Task <span class="glyphicon glyphicon-plus"></button>
   </div>
@@ -107,7 +135,7 @@
             <div class="form-group">
               <label class="col-lg-3 control-label" for="task_name">Task Name:</label>
               <div class="col-lg-9 has-feedback">
-                  <input class="form-control" name="task_name" maxlength="30" pattern="^[A-z0-9\s]{1,}$" placeholder="Enter Task Name" type="text" required/>
+                  <input class="form-control" name="task_name" maxlength="100" pattern="^[A-z0-9\s]{1,}$" placeholder="Enter Task Name" type="text" required/>
                   <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
               </div>
             </div>
@@ -141,9 +169,9 @@
               </div>
             </div>
           <div class="form-group">
-            <label class="control-label col-lg-3" for="task_estimation">Task Estimation (hrs.):</label>
+            <label class="control-label col-lg-3" for="task_hours_estimation">Task Estimation (hrs.):</label>
             <div class="col-lg-4 has-feedback">
-              <input type="text" class="form-control" name="task_estimation" pattern="^[0-9]{1,2}$" maxlength="2" required>
+              <input type="text" class="form-control" name="task_hours_estimation" pattern="^[0-9]{1,2}$" maxlength="2" required>
               <span class="glyphicon form-control-feedback" aria-hidden="true" required></span>
             </div>
           </div>

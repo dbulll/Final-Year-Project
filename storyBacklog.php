@@ -10,6 +10,13 @@
   <script src="js/validator.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+  function epicChange(ev){
+      var selectE = document.getElementById("epic_list");
+      var epicId = selectE.options[selectE.selectedIndex].value;
+      window.location.href = "storyBacklog.php?epic_id=".concat(epicId);
+    }
+  </script>
 </head>
 <body>
 
@@ -94,6 +101,27 @@
     <h2>Story Backlog</h2>
   </div>
   <div class="row">
+    <p>Select Epic:</p>
+    <select class="col-lg-4" id="epic_list" onchange="epicChange(event)">
+      <option value=0></option>
+    <?php
+      $sql = mysqli_query($conn, 'SELECT id, epic_name FROM epic_table');
+      while($row = mysqli_fetch_array($sql))          
+      {
+        echo '<option value='. $row['id'].' ';
+        if(isset($_GET['epic_id']))
+        {
+          if($_GET['epic_id'] == $row['id'])
+          {
+            echo 'selected="selected"';
+          }
+        }
+        echo '>'. $row['epic_name'].'</option>';
+      }
+    ?>
+    </select>
+  </div>
+  <div class="row">
   <!-- Trigger the modal with a button -->
       <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">Create New Story <span class="glyphicon glyphicon-plus"></button>
   </div>
@@ -113,7 +141,7 @@
             <div class="form-group">
               <label class="col-lg-3 control-label" for="story_name">Story Name:</label>
               <div class="col-lg-9 has-feedback">
-                  <input class="form-control" name="story_name" maxlength="30" pattern="^[A-z0-9\s]{1,}$" placeholder="Enter Story Name" type="text" required/>
+                  <input class="form-control" name="story_name" maxlength="100" pattern="^[A-z0-9\s]{1,}$" placeholder="Enter Story Name" type="text" required/>
                   <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
               </div>
             </div>
@@ -157,18 +185,11 @@
                   </select>
               </div>
             </div>
-          <div class="form-group">
-            <label class="control-label col-lg-3" for="story_estimation">Story Estimation (hrs.):</label>
-            <div class="col-lg-4 has-feedback">
-              <input type="text" class="form-control" name="story_estimation" pattern="^[0-9]{1,2}$" maxlength="2" required>
-              <span class="glyphicon form-control-feedback" aria-hidden="true" required></span>
+            <div class="form-group has-feedback">
+              <div class="col-lg-offset-9 col-lg-3">
+                <button class="btn btn-success" id="submit_button" type="submit" >Create Story <span class="glyphicon glyphicon-plus"></button>
+              </div>
             </div>
-          </div>
-          <div class="form-group has-feedback">
-            <div class="col-lg-offset-9 col-lg-3">
-              <button class="btn btn-success" id="submit_button" type="submit" >Create Story <span class="glyphicon glyphicon-plus"></button>
-            </div>
-          </div>
           </form>
           </div>
         </div>

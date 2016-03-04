@@ -7,9 +7,10 @@
   $release_start_date =  date('Y-m-d', strtotime($_POST['release_start_date']));
   $release_end_date =  date('Y-m-d', strtotime($_POST['release_end_date']));
   $release_sprint_length = $_POST['release_sprint_length'];
+  $release_work_hours = $_POST['release_work_hours'];
 
   // This section of PHP adds a release to the releaseTable
-  $sql = 'INSERT INTO release_table (release_name, release_description, release_start_date, release_end_date, release_sprint_length) VALUES ("'. $release_name .'", "'. $release_description .'", "'. $release_start_date .'","'. $release_end_date .'", '. $release_sprint_length .')';
+  $sql = 'INSERT INTO release_table (release_name, release_description, release_start_date, release_end_date, release_sprint_length, release_work_hours) VALUES ("'. $release_name .'", "'. $release_description .'", "'. $release_start_date .'","'. $release_end_date .'", '. $release_sprint_length .','. $release_work_hours .')';
   if ($conn->query($sql) === TRUE) 
   {
    echo '<div class="alert alert-success"><strong>Success!</strong> Release has been successfully created!</div>';

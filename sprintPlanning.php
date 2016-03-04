@@ -216,11 +216,18 @@
         <tr>
         <th> Unplanned Stories </th>
           <?php
-              $sql = mysqli_query($conn, 'SELECT * FROM sprint_table WHERE release_table_id = ' . $_GET['release_id']);
-              $sql2 = mysqli_query($conn, 'SELECT * FROM sprint_table WHERE release_table_id = ' . $_GET['release_id']);
+              $sql = mysqli_query($conn, 'SELECT a . * , b.release_work_hours, b.release_sprint_length FROM sprint_table a, release_table b WHERE a.release_table_id = b.id AND release_table_id = ' . $_GET['release_id']);
+              
               while($row = mysqli_fetch_array($sql))
               {
-                echo '<th>'. $row['sprint_name'] .'<br> '. date('d/m/Y', strtotime($row['sprint_start_date'])) .' - '. date('d/m/Y', strtotime($row['sprint_end_date'])) .'<br><a class="btn btn-default" id="go_to_sprint" href="taskboard.php?sprint_id='. $row['id'] .'" style="margin-top: 5px;">Go To <span class="glyphicon glyphicon-arrow-right"></a></th>';
+                $available_hours = $row['release_work_hours'] * $row['release_sprint_length'];
+                $planned_hours_sql = mysqli_query($conn, 'SELECT SUM(task_hours_estimation) FROM task_table a, story_table b WHERE a.story_table_id = b.id AND sprint_table_id = '. $row['id'] );
+                $planned_hours = mysqli_fetch_array($planned_hours_sql);
+                $sprint_planned_hours = $planned_hours[0];
+                if($planned_hours[0] == NULL){$sprint_planned_hours = 0;}
+                $colorCode = 'green';
+                if($available_hours < $sprint_planned_hours ){$colorCode = 'red';}
+                echo '<th>'. $row['sprint_name'] .'<br> '. date('d/m/Y', strtotime($row['sprint_start_date'])) .' - '. date('d/m/Y', strtotime($row['sprint_end_date'])) .'<br>Hours Available: '. $available_hours .'<br><p style="color:'. $colorCode .';">Hours Planned: '. $sprint_planned_hours.'</p><a class="btn btn-default" id="go_to_sprint" href="taskboard.php?sprint_id='. $row['id'] .'" style="margin-top: 5px;">Go To <span class="glyphicon glyphicon-arrow-right"></a></th>';
               }
             
           ?>
@@ -233,28 +240,29 @@
             $sqlTemp = mysqli_query($conn, 'SELECT * FROM story_table WHERE sprint_table_id IS NULL');
             while($rowTemp = mysqli_fetch_array($sqlTemp))
             {
-              $story_estimation = mysqli_query($conn, 'SELECT SUM(task_estimation) AS story_estimation FROM task_table WHERE story_table_id = '.$rowTemp['id']);
+              $story_estimation = mysqli_query($conn, 'SELECT SUM(task_hours_estimation) AS story_estimation FROM task_table WHERE story_table_id = '.$rowTemp['id']);
               $story_estimation_array = mysqli_fetch_array($story_estimation);
               if($story_estimation_array['story_estimation'] == NULL)
               {
                 $story_estimation_array['story_estimation'] = 0;
               }
-              echo '<div class="sPlanStory" id="'. $rowTemp['id'] .'" draggable="true" ondragstart="drag(event)"><strong>'. $rowTemp['story_name'] .'</strong><br>Estimation: '. $story_estimation_array['story_estimation'] .' hrs<br>Priority: '. $rowTemp['story_priority'] .'</div>';   
+              echo '<div class="sPlanStory" id="'. $rowTemp['id'] .'" draggable="true" ondragstart="drag(event)"><h4>'. $rowTemp['story_name'] .'</h4>Estimation: '. $story_estimation_array['story_estimation'] .' hrs<br>Priority: '. $rowTemp['story_priority'] .'</div>';   
             }
             echo '</td>';
+            $sql2 = mysqli_query($conn, 'SELECT * FROM sprint_table WHERE release_table_id = ' . $_GET['release_id']);
             while ($row2 = mysqli_fetch_array($sql2))
             { 
               $sql3 = mysqli_query($conn, 'SELECT * FROM story_table WHERE sprint_table_id = '. $row2['id']);
               echo '<td value="'. $row2['id'] .'" class="droptarget" ondrop="drop(event)" ondragover="allowDrop(event)">'; 
               while($row3 = mysqli_fetch_array($sql3))
               {
-                $story_estimation2 = mysqli_query($conn, 'SELECT SUM(task_estimation) AS story_estimation FROM task_table WHERE story_table_id = '.$row3['id']);
+                $story_estimation2 = mysqli_query($conn, 'SELECT SUM(task_hours_estimation) AS story_estimation FROM task_table WHERE story_table_id = '.$row3['id']);
                 $story_estimation_array2 = mysqli_fetch_array($story_estimation2);
                 if($story_estimation_array2['story_estimation'] == NULL)
                 {
                   $story_estimation_array2['story_estimation'] = 0;
                 }
-                echo '<div class="sPlanStory" id="'. $row3['id'] .'" draggable="true" ondragstart="drag(event)"><strong>'. $row3['story_name'] .'</strong><br>Estimation: '. $story_estimation_array2['story_estimation'] .' hrs<br>Priority: '. $row3['story_priority'] .'</div>';   
+                echo '<div class="sPlanStory" id="'. $row3['id'] .'" draggable="true" ondragstart="drag(event)"><h4>'. $row3['story_name'] .'</h4>Estimation: '. $story_estimation_array2['story_estimation'] .' hrs<br>Priority: '. $row3['story_priority'] .'</div>';   
               }
             }
           }

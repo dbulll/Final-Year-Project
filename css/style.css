@@ -27,7 +27,6 @@ body {
 .sPlanStory, .sPlanTask {
 	width: 250px;
 	height: auto;
-	background-color: lavender;
 	border-style: solid;
 	text-align: center;
 	border-width: 1px;
@@ -35,6 +34,11 @@ body {
 	margin-top: 5px;
 	margin-bottom: 5px;
 	border-radius: 5px;
+	border-color: #880044;
+}
+
+.sPlanStory>h4, .sPlanTask>h4 {
+	color: #880044;
 }
 
 #taskStateTd{
@@ -55,6 +59,8 @@ body {
 .pageDesc>h4{
 	color: #880044;
 }
+
+
 
 /* CSS for Backlog */
 th,td {

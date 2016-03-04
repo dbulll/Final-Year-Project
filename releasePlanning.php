@@ -110,7 +110,7 @@
             <div class="form-group">
               <label class="col-lg-3 control-label" for="release_name">Release Name:</label>
               <div class="col-lg-9 has-feedback">
-                  <input class="form-control" name="release_name" maxlength="30" pattern="^[A-z0-9\s]{1,}$" placeholder="Enter Release Name" type="text" required/>
+                  <input class="form-control" name="release_name" maxlength="100" pattern="^[A-z0-9\s]{1,}$" placeholder="Enter Release Name" type="text" required/>
                   <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
               </div>
             </div>
@@ -121,32 +121,46 @@
                   <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
               </div>
             </div>
-            <div class="row">
-              <div class="col-lg-4">
-                <label class="control-label" for="release_start_date">Release Start Date</label>
-                <input type="date" class="form-control" name="release_start_date" required>
-              </div>
-              <div class="col-lg-4">
-                <label class="control-label" for="release_end_date">Release End Date</label>
-                <input type="date" class="form-control" name="release_end_date" required>
-              </div>
-              <div class="col-lg-4 form-group has-feedback">
-                <label class="control-label" for="release_sprint_length">Sprint Length (days.)</label>
-                <input type="text" class="form-control" name="release_sprint_length" pattern="^[0-9]{1,2}$" maxlength="2" required>
+            <div class="form-group">
+              <label class="col-lg-5 control-label" for="release_start_date">Release Start Date</label>
+              <div class="col-lg-7 has-feedback">
+                <input type="date" class="form-control" name="release_start_date" required/>
                 <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
               </div>
             </div>
             <div class="form-group">
-              <div class="col-lg-offset-8 col-lg-3">
-                <button class="btn btn-success" type="submit" id="submit_button">Create Release <span class="glyphicon glyphicon-plus"></button>
+              <label class="col-lg-5 control-label" for="release_end_date">Release End Date</label>
+              <div class="col-lg-7 has-feedback">
+                <input type="date" class="form-control" name="release_end_date" required>
+                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-5 control-label" for="release_sprint_length">Sprint Length (days.)</label>
+              <div class="col-lg-7 has-feedback">
+                <input type="text" class="form-control" name="release_sprint_length" pattern="^[0-9]{1,2}$" maxlength="2" required/>
+                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-5 control-label" for="release_work_hours">Average Work Day (hrs.)</label>
+              <div class="col-lg-7 has-feedback">
+                <input type="text" class="form-control" name="release_work_hours" pattern="^[0-9]{1}$" maxlength="1" required/>
+                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-lg-4 pull-right">
+                <button class="btn btn-success" type="submit" id="submit_button" style="width:100%;margin-top:10px;">Create Release <span class="glyphicon glyphicon-plus"></button>
               </div>
             </div>
           </form>
-          </div>
         </div>
       </div>
     </div>
   </div>
+</div
+<div class="row">
   <div class="table-responsive">        
     <table class="table table-striped">
       <thead>
@@ -156,6 +170,7 @@
           <th>Start Date</th>
           <th>End Date</th>
           <th>Sprint Length (days.)</th>
+          <th>Avg. Work Hours Per Day</th>
           <th></th>
           <th></th>
         </tr>

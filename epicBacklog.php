@@ -102,7 +102,7 @@
             <div class="form-group">
               <label class="col-lg-3 control-label" for="epic_name">Epic Name:</label>
               <div class="col-lg-9 has-feedback">
-                  <input class="form-control" name="epic_name" maxlength="30" pattern="^[A-z0-9\s]{1,}$" placeholder="Enter Epic Name" type="text" required/>
+                  <input class="form-control" name="epic_name" maxlength="100" pattern="^[A-z0-9\s]{1,}$" placeholder="Enter Epic Name" type="text" required/>
                   <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
               </div>
             </div>

@@ -10,6 +10,7 @@
         <td><?php echo $row['release_start_date'];?></td>
         <td><?php echo $row['release_end_date'];?></td>
         <td><?php echo $row['release_sprint_length'];?></td>
+        <td><?php echo $row['release_work_hours'];?></td>
         <td>
           <a class="btn btn-info" id="sprintsButton" href="sprintPlanning.php?release_id=<?php echo $row['id'];?>">
             Sprints <span class="glyphicon glyphicon-arrow-right"></span>
