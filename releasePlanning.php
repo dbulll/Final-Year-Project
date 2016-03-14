@@ -1,15 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>No Name</title>
+  <title>Scrumble</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <link href="https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet"/>
   <script src="js/jquery-2.2.0.js"></script>
   <script src="js/validator.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function() 
+  {
+    $('#example').dataTable( 
+    {
+      "order": [],
+      "columnDefs": 
+      [{
+        "targets"  : 'no-sort',
+        "orderable": false,
+      }]
+    });
+  });
+  </script>
 </head>
 <body>
 
@@ -23,7 +40,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="index.html">No Name</a>
+      <a class="navbar-brand" href="index.html">Scrumble</a>
     </div>
     <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="nav navbar-nav">
@@ -57,14 +74,10 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-lg-6">
-      <a class="btn btn-default" id="taskBacklogButton" href="taskBacklog.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Task Backlog
+      <a class="btn btn-nav" id="taskBacklogButton" href="taskBacklog.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Task Backlog
       </a>
-    </div>
-    <div class="col-lg-6">
-      <a class="btn btn-default pull-right" id="sprintPlanningButton" href="sprintPlanning.php" style="margin-bottom: 10px;">Sprint Planning <span class="glyphicon glyphicon-arrow-right"></span>
+      <a class="btn btn-nav pull-right" id="sprintPlanningButton" href="sprintPlanning.php" style="margin-bottom: 10px;">Sprint Planning <span class="glyphicon glyphicon-arrow-right"></span>
       </a>
-    </div>
   </div>
   <?php
     include 'php/connectionStart.php'; 
@@ -72,7 +85,7 @@
     if(isset($_GET['remove'])){include 'php/releaseRemove.php';}
   ?>
   <div class="row">
-    <button class="btn btn-primary pull-right" data-toggle="collapse" data-target="#help_div">Page Help</button>
+    <button class="btn btn-help pull-right" data-toggle="collapse" data-target="#help_div">Page Help</button>
   </div>
   <div class="row pageDesc collapse" id="help_div">
     <h4>Page Help <span class="glyphicon glyphicon-exclamation-sign"></h4>
@@ -92,7 +105,7 @@
   </div>
   <div class="row">
     <!-- Trigger the modal with a button -->
-    <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">Create New Release <span class="glyphicon glyphicon-plus"></button>
+    <button type="button" class="btn btn-success pull-right successButton" data-toggle="modal" data-target="#myModal">Create New Release <span class="glyphicon glyphicon-plus"></button>
   </div>
   <div class="row">
     <!-- Modal -->
@@ -159,20 +172,20 @@
       </div>
     </div>
   </div>
-</div
+</div>
 <div class="row">
   <div class="table-responsive">        
-    <table class="table table-striped">
+    <table id="example" class="table">
       <thead>
         <tr>
           <th>Release Name</th>
-          <th>Release Description</th>
+          <th class="no-sort">Release Description</th>
           <th>Start Date</th>
           <th>End Date</th>
-          <th>Sprint Length (days.)</th>
-          <th>Avg. Work Hours Per Day</th>
-          <th></th>
-          <th></th>
+          <th class="no-sort">Sprint Length</th>
+          <th class="no-sort">Work Hours Per Day</th>
+          <th class="no-sort"></th>
+          <th class="no-sort"></th>
         </tr>
       </thead>
       <tbody>

@@ -18,7 +18,7 @@
         </td>
         <td>
           <a class="btn btn-danger" id="removeButton" href="epicBacklog.php?remove=<?php echo $row['id'];?>">
-            Remove <span class="glyphicon glyphicon-remove"></span>
+            <span class="glyphicon glyphicon-remove"></span>Remove 
           </a>
         </td>
         </tr>

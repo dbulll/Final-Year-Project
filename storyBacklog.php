@@ -1,21 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>No Name</title>
+  <title>Scrumble</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <link href="https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet"/>
   <script src="js/jquery-2.2.0.js"></script>
   <script src="js/validator.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"></script>
   <script type="text/javascript">
   function epicChange(ev){
       var selectE = document.getElementById("epic_list");
       var epicId = selectE.options[selectE.selectedIndex].value;
       window.location.href = "storyBacklog.php?epic_id=".concat(epicId);
     }
+  $(document).ready(function() 
+  {
+    $('#example').dataTable( 
+    {
+      "order": [],
+      "columnDefs": 
+      [{
+        "targets"  : 'no-sort',
+        "orderable": false,
+      },
+      {
+        "targets" : 'moscow-priority',
+        "type" : 'moscow',
+      }]
+    });
+  });
+  $.extend($.fn.dataTableExt.oSort, {
+    "moscow-pre": function ( a ) {
+      var vals = ["MUST", "SHOULD", "COULD", "WONT"];
+        return $.inArray(a, vals);
+    },
+    "moscow-asc": function ( a, b ) {
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+    "moscow-desc": function ( a, b ) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    }
+} );
   </script>
 </head>
 <body>
@@ -30,7 +61,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="index.html">No Name</a>
+      <a class="navbar-brand" href="index.html">Scrumble</a>
     </div>
     <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="nav navbar-nav">
@@ -65,14 +96,10 @@
 <div class="container">
 
   <div class="row">
-    <div class="col-lg-6">
-      <a class="btn btn-default" id="epicBacklogButton" href="epicBacklog.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Epic Backlog
+      <a class="btn btn-nav" id="epicBacklogButton" href="epicBacklog.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Epic Backlog
       </a>
-    </div>
-    <div class="col-lg-6">
-      <a class="btn btn-default pull-right" id="taskBacklogButton" href="taskBacklog.php" style="margin-bottom: 10px;">Task Backlog <span class="glyphicon glyphicon-arrow-right"></span>
+      <a class="btn btn-nav pull-right" id="taskBacklogButton" href="taskBacklog.php" style="margin-bottom: 10px;">Task Backlog <span class="glyphicon glyphicon-arrow-right"></span>
       </a>
-    </div>
   </div>
   <!-- Start a connectin and check for actions -->
   <?php 
@@ -81,7 +108,7 @@
     if(isset($_GET['remove'])){include 'php/storyRemove.php';}
   ?>
   <div class="row">
-    <button class="btn btn-primary pull-right" data-toggle="collapse" data-target="#help_div">Page Help</button>
+    <button class="btn btn-help pull-right" data-toggle="collapse" data-target="#help_div">Page Help</button>
   </div>
   <div class="row pageDesc collapse collapse" id="help_div">
     <h4>Page Help <span class="glyphicon glyphicon-exclamation-sign"></h4>
@@ -123,7 +150,7 @@
   </div>
   <div class="row">
   <!-- Trigger the modal with a button -->
-      <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#myModal">Create New Story <span class="glyphicon glyphicon-plus"></button>
+      <button type="button" class="btn btn-success pull-right successButton" data-toggle="modal" data-target="#myModal">Create New Story <span class="glyphicon glyphicon-plus"></button>
   </div>
   <div class="row">
 <!-- Modal -->
@@ -200,17 +227,17 @@
 <!-- List of Stories in Backlog -->
   <div class="row">
     <div class="table-responsive">        
-      <table class="table table-striped">
+      <table id="example"  class="table table-striped">
         <thead>
           <tr>
             <th>Story Name</th>
-            <th>Description</th>
-            <th>Priority</th>
+            <th class="no-sort">Description</th>
+            <th class="moscow-priority">Priority</th>
             <th>Estimation (Hrs)</th>
             <th>Epic Name</th>
             <th>Tasks (No.)</th>
-            <th></th>
-            <th></th>
+            <th class="no-sort"></th>
+            <th class="no-sort"></th>
           </tr>
         </thead>
         <tbody>

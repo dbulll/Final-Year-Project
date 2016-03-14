@@ -1,5 +1,10 @@
 <!-- PHP Code - 1.Insert new Epic into the database -->
 <?php
+  $conn = new mysqli('localhost', 'root', '', 'scrum_web_app_db');
+  if($conn->connect_errno > 0)
+  {
+    die('Unable to connect to database [' . $conn->connect_error . ']');
+  }
   $epic_name = $_POST['epic_name'];
   $epic_description = $_POST['epic_description'];
   $sql = 'INSERT INTO epic_table (epic_name, epic_description) VALUES ("'. $epic_name .'", "'. $epic_description .'")';

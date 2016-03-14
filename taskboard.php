@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>No Name</title>
+  <title>Scrumble</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -75,7 +75,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="index.html">No Name</a>
+      <a class="navbar-brand" href="index.html">Scrumble</a>
     </div>
     <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="nav navbar-nav">
@@ -109,14 +109,10 @@
   
 <div class="container">
   <div class="row">
-    <div class="col-lg-6">
-      <a class="btn btn-default" id="sprintPlanningButton" href="sprintPlanning.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Sprint Planning
+      <a class="btn btn-nav" id="sprintPlanningButton" href="sprintPlanning.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Sprint Planning
       </a>
-    </div>
-    <div class="col-lg-6">
-      <a class="btn btn-default pull-right" id="reviewButton" href="review.php" style="margin-bottom: 10px;">Review <span class="glyphicon glyphicon-arrow-right"></span>
+      <a class="btn btn-nav pull-right" id="reviewButton" href="review.php" style="margin-bottom: 10px;">Review <span class="glyphicon glyphicon-arrow-right"></span>
       </a>
-    </div>
   </div>
   <?php
     include 'php/connectionStart.php';
@@ -124,7 +120,7 @@
     if(isset($_GET['update'])){include 'php/taskboardUpdate.php';}
   ?>
   <div class="row">
-    <button class="btn btn-primary pull-right" data-toggle="collapse" data-target="#help_div">Page Help</button>
+    <button class="btn btn-help pull-right" data-toggle="collapse" data-target="#help_div">Page Help</button>
   </div>
   <div class="row pageDesc collapse" id="help_div">
     <h4>Page Help <span class="glyphicon glyphicon-exclamation-sign"></h4>
@@ -174,7 +170,7 @@
     ?>
     </div>
     <div class="col-lg-4">
-      <button class="btn btn-success pull-right" id="update_taskboard" onclick="taskboardPost()" style="margin-top: 15px;">Save Changes <span class="glyphicon glyphicon-save"></button>
+      <button class="btn btn-success pull-right successButton" id="update_taskboard" onclick="taskboardPost()" style="margin-top: 15px;">Save Changes <span class="glyphicon glyphicon-save"></button>
     </div>
   </div>
   <div class="row">

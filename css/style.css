@@ -24,6 +24,10 @@ body {
 
 /* End of Navigation CSS */
 
+.successButton {
+	margin-bottom: 15px;
+}
+
 .sPlanStory, .sPlanTask {
 	width: 250px;
 	height: auto;
@@ -35,6 +39,7 @@ body {
 	margin-bottom: 5px;
 	border-radius: 5px;
 	border-color: #880044;
+	box-shadow: 3px 3px 5px #888888;
 }
 
 .sPlanStory>h4, .sPlanTask>h4 {
@@ -60,10 +65,63 @@ body {
 	color: #880044;
 }
 
+.btn-info, .btn-info:focus {
+    background-color: white;
+    border-color: #238AA9;
+    color: #238AA9;
+}
+.btn-info:hover {
+    background-color: #238AA9;
+    color: white;
+}
+.btn-success, .btn-success:focus {
+    background-color: white;
+    border-color: #3E8E3E;
+    color: #3E8E3E;
+}
 
+.btn-success:hover {
+    background-color: #3E8E3E;
+    color: white;
+}
+
+.btn-danger, .btn-danger:focus {
+    background-color: white;
+    border-color: #A72925;
+    color: #A72925;
+}
+
+.btn-danger:active {
+    background-color: #A72925;
+    color: white;
+}
+
+.btn-help, .btn-help:focus{
+	background-color: white;
+	border-color: #880044;
+	color: #880044;
+}
+.btn-help:hover{
+	background-color: #880044;
+	color: white;
+}
+
+.btn-nav, .btn-nav:focus{
+	background-color: white;
+	border-color: #222222;
+	color: #222222;
+}
+.btn-nav:hover{
+	background-color: #222222;
+	color: white;
+}
 
 /* CSS for Backlog */
 th,td {
 	text-align: center;
+}
+
+.table>thead{
+	white-space: nowrap;
 }
 

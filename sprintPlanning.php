@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>No Name</title>
+  <title>Scrumble</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -76,7 +76,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="index.html">No Name</a>
+      <a class="navbar-brand" href="index.html">Scrumble</a>
     </div>
     <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="nav navbar-nav">
@@ -110,14 +110,10 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-lg-6">
-      <a class="btn btn-default" id="releasePlanningButton" href="releasePlanning.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Release Planning
-      </a>
-    </div>
-    <div class="col-lg-6">
-      <a class="btn btn-default pull-right" id="taskboardButton" href="taskboard.php" style="margin-bottom: 10px;">Taskboard <span class="glyphicon glyphicon-arrow-right"></span>
-      </a>
-    </div>
+    <a class="btn btn-nav" id="releasePlanningButton" href="releasePlanning.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Release Planning
+    </a>
+    <a class="btn btn-nav pull-right" id="taskboardButton" href="taskboard.php" style="margin-bottom: 10px;">Taskboard <span class="glyphicon glyphicon-arrow-right"></span>
+    </a>
   </div>
   <?php
     $conn = new mysqli('localhost', 'root', '', 'scrum_web_app_db');
@@ -149,7 +145,7 @@
     }
   ?>
   <div class="row">
-    <button class="btn btn-primary pull-right" data-toggle="collapse" data-target="#help_div">Page Help</button>
+    <button class="btn btn-help pull-right" data-toggle="collapse" data-target="#help_div">Page Help</button>
   </div>
   <div class="row pageDesc collapse" id="help_div">
     <h4>Page Help <span class="glyphicon glyphicon-exclamation-sign"></h4>
@@ -211,7 +207,7 @@
   </div>
   <div class="row">
     <div class="table-responsive"> 
-      <table class="table table-bordered">
+      <table class="table">
       <thead>
         <tr>
         <th> Unplanned Stories </th>
