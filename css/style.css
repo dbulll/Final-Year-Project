@@ -78,11 +78,13 @@ body {
     background-color: white;
     border-color: #3E8E3E;
     color: #3E8E3E;
+    outline: none;
 }
 
-.btn-success:hover {
+.btn-success:hover, .btn-success:active {
     background-color: #3E8E3E;
     color: white;
+    outline: none;
 }
 
 .btn-danger, .btn-danger:focus {
@@ -100,10 +102,13 @@ body {
 	background-color: white;
 	border-color: #880044;
 	color: #880044;
+	outline: none;
 }
+
 .btn-help:hover{
 	background-color: #880044;
 	color: white;
+	outline: none;
 }
 
 .btn-nav, .btn-nav:focus{
@@ -116,7 +121,14 @@ body {
 	color: white;
 }
 
+
+.form-horizontal .form-group {
+    margin-right: 0px; 
+    margin-left: 0px; 
+}
+
 /* CSS for Backlog */
+
 th,td {
 	text-align: center;
 }

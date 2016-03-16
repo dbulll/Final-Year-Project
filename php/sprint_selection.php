@@ -1,4 +1,4 @@
-<!-- This php code will find the list of user stories in the backlog and present them in a drop down select -->
+<!-- This php code will find the list of sprints in the backlog and present them in a drop down select -->
 <div class="row">
   <p>Select the desired sprint</p>
   <select class="col-lg-4" id="sprint_list" onchange="sprintChange(event)">

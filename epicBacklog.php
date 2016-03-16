@@ -40,11 +40,11 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button>
-      <a class="navbar-brand" href="index.html">Scrumble</a>
+      <a class="navbar-brand" href="index.php">Scrumble</a>
     </div>
     <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="nav navbar-nav">
-        <li><a href="index.html">Home</a></li>
+        <li><a href="index.php">Home</a></li>
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Backlog<span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -61,10 +61,28 @@
           </ul>
         </li>
         <li><a href="taskboard.php">Task Board</a></li>
-        <li><a href="review.php">Review</a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Review<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="sprintReview.php">Sprint Review</a></li>
+            <li><a href="releaseReview.php">Release Review</a></li>
+          </ul>
+        </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="login.html"><span class="glyphicon glyphicon-user"></span> Sign Up / Sign In</a></li>
+        <li><a href="login.php"><span class="glyphicon glyphicon-user"></span> 
+        <?php
+          include 'php/userConnectionStart.php';
+          if(!empty($_SESSION['LoggedIn']) && !empty($_SESSION['Username']))
+          {
+            echo $_SESSION['Username'];
+          }
+          else
+          {
+            echo 'Sign Up / Sign In';
+          }
+        ?>
+        </a></li>
       </ul>
     </div>
   </div>
@@ -78,7 +96,6 @@
       </a>
   </div>
   <?php 
-    include 'php/connectionStart.php';
     if(isset($_POST['epic_name'])){include 'php/epicCreate.php';}
     if(isset($_GET['remove'])){include 'php/epicRemove.php';}
   ?>
