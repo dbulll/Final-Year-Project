@@ -107,7 +107,7 @@
           </ul>
         </li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
+      <!--<ul class="nav navbar-nav navbar-right">
         <li><a href="login.php"><span class="glyphicon glyphicon-user"></span> 
         <?php
           if(!empty($_SESSION['LoggedIn']) && !empty($_SESSION['Username']))
@@ -120,7 +120,7 @@
           }
         ?>
         </a></li>
-      </ul>
+      </ul>-->
     </div>
   </div>
 </nav>

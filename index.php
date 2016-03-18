@@ -50,7 +50,7 @@
           </ul>
         </li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
+      <!--<ul class="nav navbar-nav navbar-right">
         <li><a href="login.php"><span class="glyphicon glyphicon-user"></span> 
         <?php
           include 'php/userConnectionStart.php';
@@ -64,7 +64,7 @@
           }
         ?>
         </a></li>
-      </ul>
+      </ul>-->
     </div>
   </div>
 </nav>
@@ -72,29 +72,67 @@
 <!-- Main Container -->
 
 <div class="container">
-  <h1>Website under contstruction</h1>
-  <p>Bare in mind that the website is still being worked on and functionality may not be working as expected.</p>
-  <h1>Upcoming Features</h1>
-  <ul>
-    <li>1a When looking at ongoing sprints, consider End of Actual line of burndown graph should decline with average work hours towards the end to see just how far behind you are falling. Extra line coming off the actual line on current day pointing down to the expected end date.</li>
-    <li>1b Predicted end date statistcs on sprint.</li>
-    <li>2 Remove blank entry on dropdowns or block the redirect to id=0</li>
-    <li>3 Include priorities with different colour for story bar chart</li>
-    <li>4 Release should include inputs for:</li>
-    <ul>
-    <li>5 Days of the week - CheckBoxes</li>
-    </ul>
-    <li>6 Release Length Statistics and graphs</li>
-    <li>7 Recycle Bin for Items Preventing the user from accidentally deleting data</li>
-    <li>8 Colour coded elements on the task board for tasks that have overun the estimated hours.</li>
-    <li>9 The inputs should reflect the estimation values for the BurnDown Graph</li>
-    <li>10 Edit for Elements</li>
-    <li>11 Validate Task hours dates</li>
-    <li>12 Homepage design with links to Agile/Scrum tutorials and Screenshots of the site.</li>
-    <li>13 Tutorial</li>
-    <li>14 Multiple Removes at the same time (check box for each element in a seperate column)</li>
-    <li>15 Sprint planning should take up whole width of screen to get more columns in view, currenty 1/4 being cut off sides.</li>
-  </ul>
+  <a class="btn btn-nav pull-right" id="epicBacklogButton" href="epicBacklog.php" style="margin-bottom: 10px;">Epic Backlog <span class="glyphicon glyphicon-arrow-right"></span>
+  </a>
+  <div class="row">
+    <h4>Use the navigation bar in the header or navigation buttons located at the top of each screen to traverse through the site ></h4>
+  </div>
+  <div class="row" style="text-align:center; margin-top:5%; margin-bottom:5%;">
+    <div class="col-lg-3">
+      <a href="epicBacklog.php"><span class="glyphicon glyphicon-list-alt" style="font-size:8em;"></span></a>
+      <h4>Create, estimate and prioritise Epic's, User Stories and Tasks in the Backlog</h4>
+    </div>
+    <div class="col-lg-3">
+      <a href="releasePlanning.php"><span class="glyphicon glyphicon-calendar" style="font-size:8em;"></span></a>
+      <h4>Define, manage and organise your projects using the Release and Sprint planning.</h4>
+    </div>
+    <div class="col-lg-3">
+      <a href="taskboard.php"><span class="glyphicon glyphicon-blackboard" style="font-size:8em;"></span></a>
+      <h4>Keep track of ongoing and completed work using the Task Board</h4>
+    </div>
+    <div class="col-lg-3">
+      <a href="releaseReview.php"><span class="glyphicon glyphicon-stats" style="font-size:8em;"></span></a>
+      <h4>Review the health of previous an currently running Sprints & Releases</h4>
+    </div>
+  </div>
+  <?php
+    if(!empty($_POST['feedback_like']) || !empty($_POST['feedback_dislike']) || !empty($_POST['feedback_suggestions']))
+    {
+      mail("up643992@myport.ac.uk", "Scrumble Feedback",
+      "Likes: ".$_POST["feedback_like"].
+      " Dislikes: ".$_POST["feedback_dislike"].
+      " Suggestions: ".$_POST["feedback_suggestions"]
+      , "From: bobhuddle@gmail.com");
+    }
+  ?>
+  <h1>Feedback</h1>
+    <p>If you could spare some time to provide feedback on the application it would be appreciated.</p>
+    <form action="index.php" class="form-horizontal" data-toggle="validator" id="feedbackForm" method="post" novalidate="true" role="form">
+      <div class="form-group">
+        <label class="control-label" for="feedback_like">Aspects that you liked</label>
+        <div class="has-feedback">
+          <textarea class="form-control" name="feedback_like" type="text"></textarea>
+          <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label" for="feedback_diskike">Aspects that you you didn't like as much</label>
+        <div class="has-feedback">
+          <textarea class="form-control" name="feedback_dislike" type="text"></textarea>
+          <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label" for="feedback_suggestions">Suggestions</label>
+        <div class="has-feedback">
+          <textarea class="form-control" name="feedback_suggestions" type="text"></textarea>
+          <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+        </div>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-success" type="submit" id="submit_feedback">Submit Feedback <span class="glyphicon glyphicon-plus"></button>
+      </div>
+    </form>
 </div>
 </body>
 </html>

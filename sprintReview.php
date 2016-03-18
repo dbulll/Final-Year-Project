@@ -58,7 +58,7 @@
           </ul>
         </li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
+      <!--<ul class="nav navbar-nav navbar-right">
         <li><a href="login.php"><span class="glyphicon glyphicon-user"></span> 
         <?php
           include 'php/userConnectionStart.php';
@@ -72,7 +72,7 @@
           }
         ?>
         </a></li>
-      </ul>
+      </ul>-->
     </div>
   </div>
 </nav>

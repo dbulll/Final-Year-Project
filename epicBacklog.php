@@ -69,7 +69,7 @@
           </ul>
         </li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
+      <!--<ul class="nav navbar-nav navbar-right">
         <li><a href="login.php"><span class="glyphicon glyphicon-user"></span> 
         <?php
           include 'php/userConnectionStart.php';
@@ -83,7 +83,7 @@
           }
         ?>
         </a></li>
-      </ul>
+      </ul>-->
     </div>
   </div>
 </nav>
@@ -92,8 +92,10 @@
 
 <div class="container">
   <div class="row">
+  <a class="btn btn-nav" id="homeButton" href="index.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span>Homepage 
+  </a>
   <a class="btn btn-nav pull-right" id="storyBacklogButton" href="storyBacklog.php" style="margin-bottom: 10px;">Story Backlog <span class="glyphicon glyphicon-arrow-right"></span>
-      </a>
+  </a>
   </div>
   <?php 
     if(isset($_POST['epic_name'])){include 'php/epicCreate.php';}

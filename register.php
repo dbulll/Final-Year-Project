@@ -52,7 +52,7 @@
           </ul>
         </li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
+      <!--<ul class="nav navbar-nav navbar-right">
         <li class="active"><a href="login.php"><span class="glyphicon glyphicon-user"></span> 
         <?php
           include 'php/userConnectionStart.php';
@@ -66,7 +66,7 @@
           }
         ?>
         </a></li>
-      </ul>
+      </ul>-->
     </div>
   </div>
 </nav>
@@ -117,7 +117,7 @@
                 <label for="username">Username:</label><input type="text" name="username" id="username" class="form-control col-lg-4"/><br />
                 <label for="password">Password:</label><input type="password" name="password" id="password" class="form-control col-lg-4" /><br />
                 <label for="email">Email Address:</label><input type="text" name="email" id="email" class="form-control col-lg-4"/><br />
-                <button class="btn btn-default pull-right" type="submit" name="register" id="register" style="margin-top:10px;">Register</button>
+                <button class="btn btn-default pull-right" type="submit" name="register" id="register" style="margin-top:10px;" disabled>Register</button>
               </fieldset>
               </form>
             </div>
