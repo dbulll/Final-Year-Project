@@ -92,20 +92,22 @@
 
 <div class="container">
   <div class="row">
-      <a class="btn btn-nav" id="taskBacklogButton" href="taskBacklog.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Task Backlog
-      </a>
-      <a class="btn btn-nav pull-right" id="sprintPlanningButton" href="sprintPlanning.php" style="margin-bottom: 10px;">Sprint Planning <span class="glyphicon glyphicon-arrow-right"></span>
-      </a>
+    <div class="col-lg-5">
+      <a class="btn btn-nav" id="taskBacklogButton" href="taskBacklog.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Task Backlog</a>
+    </div>
+    <div class="col-lg-2">
+      <button class="btn btn-help pull-right" data-toggle="collapse" data-target="#help_div">Page Help <span class="glyphicon glyphicon-info-sign"></span></button>
+    </div>
+    <div class="col-lg-5">
+      <a class="btn btn-nav pull-right" id="sprintPlanningButton" href="sprintPlanning.php" style="margin-bottom: 10px;">Sprint Planning <span class="glyphicon glyphicon-arrow-right"></span></a>
+    </div>
   </div>
   <?php
     if(isset($_POST['release_name'])){include 'php/releaseCreate.php';}
     if(isset($_GET['remove'])){include 'php/releaseRemove.php';}
   ?>
-  <div class="row">
-    <button class="btn btn-help pull-right" data-toggle="collapse" data-target="#help_div">Page Help</button>
-  </div>
   <div class="row pageDesc collapse" id="help_div">
-    <h4>Page Help <span class="glyphicon glyphicon-exclamation-sign"></h4>
+    <h4>Page Help <span class="glyphicon glyphicon-info-sign"></h4>
     <p>This page of the planning lists the current Releases that are created in the project.</p>
     <ul style="text-align: left;">
       <li>Return to the Task Backlog using the 'Task Backlog' button</li>

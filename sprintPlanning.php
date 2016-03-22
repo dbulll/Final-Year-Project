@@ -130,10 +130,15 @@
 
 <div class="container">
   <div class="row">
-    <a class="btn btn-nav" id="releasePlanningButton" href="releasePlanning.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Release Planning
-    </a>
-    <a class="btn btn-nav pull-right" id="taskboardButton" href="taskboard.php" style="margin-bottom: 10px;">Taskboard <span class="glyphicon glyphicon-arrow-right"></span>
-    </a>
+    <div class="col-lg-5">
+      <a class="btn btn-nav" id="releasePlanningButton" href="releasePlanning.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Release Planning</a>
+    </div>
+    <div class="col-lg-2">
+      <button class="btn btn-help pull-right" data-toggle="collapse" data-target="#help_div">Page Help <span class="glyphicon glyphicon-info-sign"></span></button>
+    </div>
+    <div class="col-lg-5">
+      <a class="btn btn-nav pull-right" id="taskboardButton" href="taskboard.php" style="margin-bottom: 10px;">Taskboard <span class="glyphicon glyphicon-arrow-right"></span></a>
+    </div>
   </div>
   <?php
     if(isset($_GET['update']))
@@ -159,11 +164,8 @@
       }
     }
   ?>
-  <div class="row">
-    <button class="btn btn-help pull-right" data-toggle="collapse" data-target="#help_div">Page Help</button>
-  </div>
   <div class="row pageDesc collapse" id="help_div">
-    <h4>Page Help <span class="glyphicon glyphicon-exclamation-sign"></h4>
+    <h4>Page Help <span class="glyphicon glyphicon-info-sign"></h4>
     <p>This page of the planning helps to assign unplanned User Stories into the upcoming Sprint's for a given Release.</p>
     <ul style="text-align: left;">
       <li>Return to the Release Planning using the 'Release Planning' button</li>

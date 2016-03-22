@@ -129,20 +129,22 @@
   
 <div class="container">
   <div class="row">
-      <a class="btn btn-nav" id="sprintPlanningButton" href="sprintPlanning.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Sprint Planning
-      </a>
-      <a class="btn btn-nav pull-right" id="sprintReviewButton" href="sprintReview.php" style="margin-bottom: 10px;">Review <span class="glyphicon glyphicon-arrow-right"></span>
-      </a>
+    <div class="col-lg-5">
+      <a class="btn btn-nav" id="sprintPlanningButton" href="sprintPlanning.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Sprint Planning</a>
+    </div>
+    <div class="col-lg-2">
+      <button class="btn btn-help" data-toggle="collapse" data-target="#help_div">Page Help <span class="glyphicon glyphicon-info-sign"></span></button>
+    </div>
+    <div class="col-lg-5">
+      <a class="btn btn-nav pull-right" id="sprintReviewButton" href="sprintReview.php" style="margin-bottom: 10px;">Sprint Review <span class="glyphicon glyphicon-arrow-right"></span></a>
+    </div>
   </div>
   <?php
     if(isset($_GET['updateTask'])){include 'php/taskChange.php';}
     if(isset($_GET['update'])){include 'php/taskboardUpdate.php';}
   ?>
-  <div class="row">
-    <button class="btn btn-help pull-right" data-toggle="collapse" data-target="#help_div">Page Help</button>
-  </div>
   <div class="row pageDesc collapse" id="help_div">
-    <h4>Page Help <span class="glyphicon glyphicon-exclamation-sign"></h4>
+    <h4>Page Help <span class="glyphicon glyphicon-info-sign"></h4>
     <p>This is the Taskboard. Select a Sprint to see a list of all the Tasks from their associated planned Story. Move a Task into it's current state and update hours completed on each.</p>
     <ul style="text-align: left;">
       <li>Return to the Sprint Planning page using the 'Sprint Planning' button</li>

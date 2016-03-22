@@ -3,6 +3,10 @@ body {
 	font-family: Tahoma, Geneva, sans-serif;
 }
 
+.container{
+	width: 90%;
+}
+
 /* Navigation appearance CSS */
 
 .open>.dropdown-menu {
@@ -40,6 +44,14 @@ body {
 	border-radius: 5px;
 	border-color: #880044;
 	box-shadow: 3px 3px 5px #888888;
+}
+
+.feedbackForm {
+	border-style: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 3px #888888;
+    margin-bottom: 20px;
 }
 
 .sPlanStory>h4, .sPlanTask>h4 {
@@ -103,6 +115,7 @@ body {
 	border-color: #880044;
 	color: #880044;
 	outline: none;
+	width: 100%;
 }
 
 .btn-help:hover{

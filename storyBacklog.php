@@ -112,23 +112,24 @@
 <!-- Main Container -->
 
 <div class="container">
-
   <div class="row">
-      <a class="btn btn-nav" id="epicBacklogButton" href="epicBacklog.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Epic Backlog
-      </a>
-      <a class="btn btn-nav pull-right" id="taskBacklogButton" href="taskBacklog.php" style="margin-bottom: 10px;">Task Backlog <span class="glyphicon glyphicon-arrow-right"></span>
-      </a>
+    <div class="col-lg-5">
+      <a class="btn btn-nav" id="epicBacklogButton" href="epicBacklog.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Epic Backlog</a>
+    </div>
+    <div class="col-lg-2">
+      <button class="btn btn-help pull-right" data-toggle="collapse" data-target="#help_div">Page Help <span class="glyphicon glyphicon-info-sign"></span></button>
+    </div>
+    <div class="col-lg-5">
+      <a class="btn btn-nav pull-right" id="taskBacklogButton" href="taskBacklog.php" style="margin-bottom: 10px;">Task Backlog <span class="glyphicon glyphicon-arrow-right"></span></a>
+    </div>
   </div>
   <!-- Start a connectin and check for actions -->
   <?php 
     if(isset($_POST['story_name'])){include 'php/storyCreate.php';}
     if(isset($_GET['remove'])){include 'php/storyRemove.php';}
   ?>
-  <div class="row">
-    <button class="btn btn-help pull-right" data-toggle="collapse" data-target="#help_div">Page Help</button>
-  </div>
   <div class="row pageDesc collapse collapse" id="help_div">
-    <h4>Page Help <span class="glyphicon glyphicon-exclamation-sign"></h4>
+    <h4>Page Help <span class="glyphicon glyphicon-info-sign"></h4>
     <p>This page of the backlog list's the current Stories that are created in the project.</p>
     <ul style="text-align: left;">
       <li>Return to the Epic Backlog using the 'Epic Backlog' button</li>

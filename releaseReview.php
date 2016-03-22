@@ -81,14 +81,15 @@
   
 <div class="container">
   <div class="row">
-    <a class="btn btn-nav" id="sprintReviewButton" href="sprintReview.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Sprint Review
-    </a>
-  </div>
-  <div class="row">
-    <button class="btn btn-help pull-right" data-toggle="collapse" data-target="#help_div">Page Help</button>
+    <div class="col-lg-5">
+      <a class="btn btn-nav" id="sprintReviewButton" href="sprintReview.php" style="margin-bottom: 10px;"><span class="glyphicon glyphicon-arrow-left"></span> Sprint Review</a>
+    </div>
+    <div class="col-lg-2">
+      <button class="btn btn-help pull-right" data-toggle="collapse" data-target="#help_div">Page Help <span class="glyphicon glyphicon-info-sign"></span></button>
+    </div>
   </div>
   <div class="row pageDesc collapse" id="help_div">
-    <h4>Page Help <span class="glyphicon glyphicon-exclamation-sign"></h4>
+    <h4>Page Help <span class="glyphicon glyphicon-info-sign"></h4>
     <p>This is the Release Review page. From here you can view graphs and statistics based on a Release's progress.</p>
     <ul style="text-align: left;">
       <li>Return to the Sprint Review page using the 'Sprint Review' button</li>

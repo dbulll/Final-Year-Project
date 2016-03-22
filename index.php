@@ -105,7 +105,9 @@
       , "From: bobhuddle@gmail.com");
     }
   ?>
-  <h1>Feedback</h1>
+  <div class="row feedbackForm">
+    <div class="col-lg-8">
+    <h1>Feedback</h1>
     <p>If you could spare some time to provide feedback on the application it would be appreciated.</p>
     <form action="index.php" class="form-horizontal" data-toggle="validator" id="feedbackForm" method="post" novalidate="true" role="form">
       <div class="form-group">
@@ -130,9 +132,11 @@
         </div>
       </div>
       <div class="form-group">
-        <button class="btn btn-success" type="submit" id="submit_feedback">Submit Feedback <span class="glyphicon glyphicon-plus"></button>
+        <button class="btn btn-success" type="submit" id="submit_feedback">Submit Feedback <span class="glyphicon glyphicon-plus"></span></button>
       </div>
     </form>
+    </div>
+  </div>
 </div>
 </body>
 </html>
